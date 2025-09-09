@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EAVI Admission & Bursary System</title>
-
+    
     <!-- Favicon -->
-    <link rel="icon" href="eavi.png" type="image/png">
+    <link rel="icon" type="image/png" href="./eavi.png">
+    <link rel="shortcut icon" type="image/png" href="./eavi.png">
+    <link rel="apple-touch-icon" href="./eavi.png">
 
     <!-- CDN Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVXM5BCClRCagvRMDCGkuVTzpbclw==" crossorigin="anonymous" referrerpolicy="no-referrer" onerror="loadHtml2CanvasBackup()"></script>
@@ -832,18 +834,60 @@
             min-height: 29.7cm;
         }
 
-        /* Single page layout for printing */
+        /* Single page layout for printing and PDF generation */
         .page.single-page {
             width: 21cm;
             height: 29.7cm;
             min-height: auto;
             padding: 1cm;
-            font-size: 13px;
+            font-size: 16px; /* Fixed font size for consistent PDF output */
             box-sizing: border-box;
             overflow: hidden;
             margin: 0 auto;
             background: white;
             position: relative;
+            /* Force consistent rendering regardless of device */
+            -webkit-text-size-adjust: none;
+            text-size-adjust: none;
+            zoom: 1;
+            transform: scale(1);
+            transform-origin: top left;
+        }
+
+        /* Ensure consistent element sizing for PDF generation */
+        .single-page * {
+            -webkit-text-size-adjust: none;
+            text-size-adjust: none;
+            zoom: 1;
+        }
+
+        /* Force white background for PDF generation */
+        .single-page,
+        .single-page *,
+        .single-page .page,
+        .single-page .letter-body,
+        .single-page .letter-header,
+        .single-page .letter-footer {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+
+        /* Ensure colored elements maintain their intended colors */
+        .single-page .student-name {
+            color: #27ae60 !important;
+        }
+        .single-page .course-name {
+            color: #8e44ad !important;
+        }
+        .single-page .admission-number {
+            color: #f39c12 !important;
+        }
+        .single-page .reporting-date {
+            color: #e74c3c !important;
+        }
+        .single-page .fee-amount {
+            color: #16a085 !important;
         }
 
         .page-header-img {
@@ -1226,14 +1270,17 @@
                 width: 21cm !important;
                 height: 29.7cm !important;
                 max-height: 29.7cm !important;
-                padding: 0.5cm 1cm !important;
-                font-size: 12px !important;
-                line-height: 1.3 !important;
+                padding: 1cm !important;
+                font-size: 16px !important; /* Consistent with non-print version */
+                line-height: 1.4 !important;
                 overflow: hidden !important;
                 page-break-after: avoid !important;
                 page-break-inside: avoid !important;
                 transform: scale(1) !important;
                 transform-origin: top left !important;
+                -webkit-text-size-adjust: none !important;
+                text-size-adjust: none !important;
+                zoom: 1 !important;
             }
             
             .single-page .page-header-img {
@@ -1429,19 +1476,11 @@
                 <label for="adminType">Select Campus</label>
                 <select id="adminType" required>
                     <option value="">Choose Campus...</option>
-                    <option value="west">West Campus Admin</option>
-                    <option value="town">Town Campus Admin</option>
+                    <option value="west">West Campus</option>
+                    <option value="town">Town Campus</option>
                 </select>
             </div>
-            <div class="input-group">
-                <label for="loginUsername">Username</label>
-                <input type="text" id="loginUsername" placeholder="Enter username">
-            </div>
-            <div class="input-group">
-                <label for="loginPassword">Password</label>
-                <input type="password" id="loginPassword" placeholder="Enter password">
-            </div>
-            <button id="loginBtn">Login</button>
+            <button id="loginBtn">Access System</button>
             <p id="loginError"></p>
         </div>
     </div>
@@ -1527,7 +1566,7 @@
                         <div class="form-group">
                             <label>Permanent Assets</label>
                             <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
-                                <p style="color: var(--success-color); font-size: 0.9rem; margin: 0;">✓ Header: eavi.png loaded</p>
+                                <p style="color: var(--success-color); font-size: 0.9rem; margin: 0;">✓ Header: image.png loaded</p>
                                 <p style="color: var(--success-color); font-size: 0.9rem; margin: 0;">✓ Stamp: stamp.png loaded</p>
                             </div>
                         </div>
@@ -1539,6 +1578,7 @@
                             <button id="btnResetForm" class="btn btn-secondary">🔄 Reset Form</button>
                         </div>
                         <p style="margin-top: 1rem; color: var(--text-light); font-size: 0.9rem;">Clicking 'Generate' will create both admission and bursary letters, save the student record, and take you to the view page.</p>
+                        <p style="margin-top: 0.5rem; color: var(--success-color); font-size: 0.85rem; font-weight: 500;">✓ PDF export now generates consistent A4 size across all devices (Windows & Mobile)</p>
                     </div>
                 </div>
             </div>
@@ -1818,8 +1858,6 @@
             
             // Clear login form
             adminType.value = '';
-            loginUsername.value = '';
-            loginPassword.value = '';
             loginError.textContent = '';
             
             loginBtn.addEventListener('click', handleLogin, { once: true });
@@ -1835,41 +1873,29 @@
         // --- AUTHENTICATION ---
         const adminCredentials = {
             west: {
-                username: 'westadmin',
-                password: 'west2024',
                 displayName: 'West Campus Admin'
             },
             town: {
-                username: 'townadmin', 
-                password: 'town2024',
                 displayName: 'Town Campus Admin'
             }
         };
 
         function handleLogin() {
             const campusType = adminType.value.trim();
-            const user = loginUsername.value.trim();
-            const pass = loginPassword.value.trim();
             
             // Clear previous error
             loginError.textContent = '';
             
-            // Validate inputs
+            // Validate campus selection
             if (!campusType) {
                 loginError.textContent = 'Please select a campus.';
                 loginBtn.addEventListener('click', handleLogin, { once: true });
                 return;
             }
             
-            if (!user || !pass) {
-                loginError.textContent = 'Please enter both username and password.';
-                loginBtn.addEventListener('click', handleLogin, { once: true });
-                return;
-            }
-            
-            // Check credentials
+            // Set admin based on campus selection
             const credentials = adminCredentials[campusType];
-            if (credentials && user === credentials.username && pass === credentials.password) {
+            if (credentials) {
                 state.currentAdmin = {
                     type: campusType,
                     displayName: credentials.displayName
@@ -1878,7 +1904,7 @@
                 sessionStorage.setItem('eaviAdmin', JSON.stringify(state.currentAdmin));
                 showApp();
             } else {
-                loginError.textContent = 'Invalid username or password for selected campus.';
+                loginError.textContent = 'Invalid campus selection.';
                 loginBtn.addEventListener('click', handleLogin, { once: true });
             }
         }
@@ -2372,7 +2398,7 @@
                             <p>Due to financial difficulty, the student is not able to continue/start the course immediately; therefore we request that you give this student school fee support.</p>
                         </div>
                         
-                        <p>The student has a fee balance of <span class="fee-amount">KES ${data.feeBalance.toLocaleString()}</span>. The total fees per year is <span class="fee-amount">KES ${data.totalPerTerm.toLocaleString()}</span>.</p>
+                        <p>The student has a fee balance of <span class="fee-amount">KES ${data.feeBalance.toLocaleString()}</span>. The total fees per term is <span class="fee-amount">KES ${data.totalPerTerm.toLocaleString()}</span>.</p>
                         
                         <h4>💳 Fee Payment Details</h4>
                         <div class="payment-details">
@@ -2588,19 +2614,33 @@
                 return;
             }
             
-            // Create a temporary element with single-page styling
+            // Get device pixel ratio for consistent sizing across devices
+            const devicePixelRatio = window.devicePixelRatio || 1;
+            
+            // Create temporary element with fixed size in pixels (A4 proportions)
             const tempDiv = document.createElement('div');
             tempDiv.style.position = 'fixed';
-            tempDiv.style.top = '0';
-            tempDiv.style.left = '0';
-            tempDiv.style.width = '21cm';
-            tempDiv.style.height = '29.7cm';
+            tempDiv.style.top = '-9999px';
+            tempDiv.style.left = '-9999px';
+            
+            // Use consistent pixel dimensions for A4 (210mm x 297mm at 96 DPI)
+            const a4WidthPx = 794;  // 210mm * 96DPI / 25.4
+            const a4HeightPx = 1123; // 297mm * 96DPI / 25.4
+            
+            tempDiv.style.width = a4WidthPx + 'px';
+            tempDiv.style.height = a4HeightPx + 'px';
             tempDiv.style.backgroundColor = '#ffffff';
             tempDiv.style.zIndex = '9999';
-            tempDiv.style.padding = '1cm';
-            tempDiv.style.margin = '0 auto';
+            tempDiv.style.padding = '37.8px'; // 1cm = 37.8px at 96 DPI
+            tempDiv.style.margin = '0';
             tempDiv.style.boxSizing = 'border-box';
             tempDiv.style.overflow = 'hidden';
+            tempDiv.style.fontSize = '16px'; // Ensure consistent font size
+            tempDiv.style.fontFamily = 'Times New Roman, serif';
+            tempDiv.style.transform = 'scale(1)'; // Reset any potential scaling
+            tempDiv.style.transformOrigin = 'top left';
+            tempDiv.style.color = '#000000'; // Ensure black text
+            tempDiv.style.background = '#ffffff'; // Force white background
             
             if (docType === 'Admission') {
                 // For admission letters, get only the first page and apply single-page class
@@ -2608,6 +2648,22 @@
                 if (firstPage) {
                     const clonedPage = firstPage.cloneNode(true);
                     clonedPage.classList.add('single-page');
+                    
+                    // Override any responsive styles for PDF generation
+                    clonedPage.style.width = '100%';
+                    clonedPage.style.height = '100%';
+                    clonedPage.style.minHeight = 'auto';
+                    clonedPage.style.maxWidth = 'none';
+                    clonedPage.style.margin = '0';
+                    clonedPage.style.padding = '37.8px'; // 1cm
+                    clonedPage.style.fontSize = '16px';
+                    clonedPage.style.fontFamily = 'Times New Roman, serif';
+                    clonedPage.style.boxSizing = 'border-box';
+                    clonedPage.style.transform = 'none';
+                    clonedPage.style.backgroundColor = '#ffffff'; // Force white background
+                    clonedPage.style.background = '#ffffff'; // Additional background setting
+                    clonedPage.style.color = '#000000'; // Ensure black text
+                    
                     tempDiv.appendChild(clonedPage);
                 }
             } else {
@@ -2616,6 +2672,22 @@
                 if (bursaryPage) {
                     const clonedPage = bursaryPage.cloneNode(true);
                     clonedPage.classList.add('single-page');
+                    
+                    // Override any responsive styles for PDF generation
+                    clonedPage.style.width = '100%';
+                    clonedPage.style.height = '100%';
+                    clonedPage.style.minHeight = 'auto';
+                    clonedPage.style.maxWidth = 'none';
+                    clonedPage.style.margin = '0';
+                    clonedPage.style.padding = '37.8px'; // 1cm
+                    clonedPage.style.fontSize = '16px';
+                    clonedPage.style.fontFamily = 'Times New Roman, serif';
+                    clonedPage.style.boxSizing = 'border-box';
+                    clonedPage.style.transform = 'none';
+                    clonedPage.style.backgroundColor = '#ffffff'; // Force white background
+                    clonedPage.style.background = '#ffffff'; // Additional background setting
+                    clonedPage.style.color = '#000000'; // Ensure black text
+                    
                     tempDiv.appendChild(clonedPage);
                 }
             }
@@ -2636,12 +2708,22 @@
                 
                 // Use html2canvas to capture the content
                 html2canvas(tempDiv, { 
-                    scale: 2, 
+                    scale: 1, // Use scale 1 for consistent results
                     useCORS: true,
                     allowTaint: true,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff', // Force white background
+                    width: a4WidthPx,
+                    height: a4HeightPx,
+                    foreignObjectRendering: false, // Better compatibility
+                    removeContainer: false,
+                    logging: false, // Disable logging
+                    onclone: function(clonedDoc) {
+                        // Ensure white background on cloned document
+                        clonedDoc.body.style.backgroundColor = '#ffffff';
+                        clonedDoc.body.style.background = '#ffffff';
+                    }
                 }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
+                    const imgData = canvas.toDataURL('image/png', 1.0);
                     
                     // Access jsPDF correctly with multiple fallback methods
                     let jsPDF;
@@ -2656,23 +2738,11 @@
                     }
                     
                     const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pageWidth = pdf.internal.pageSize.getWidth();
-                    const pageHeight = pdf.internal.pageSize.getHeight();
+                    const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
+                    const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
 
-                    // Calculate scale to fit width and height
-                    const imgWidth = canvas.width;
-                    const imgHeight = canvas.height;
-                    const ratio = Math.min(pageWidth / (imgWidth * 0.264583), pageHeight / (imgHeight * 0.264583));
-
-                    // Calculate actual dimensions in mm
-                    const finalWidth = (imgWidth * 0.264583) * ratio;
-                    const finalHeight = (imgHeight * 0.264583) * ratio;
-
-                    // Centering
-                    const x = (pageWidth - finalWidth) / 2;
-                    const y = (pageHeight - finalHeight) / 2;
-
-                    pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
+                    // Use the full page size for consistent results across all devices
+                    pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight, '', 'FAST');
                     
                     const fileName = docType === 'Admission' ? 
                         `Admission_Letter_${state.currentStudentData.name.replace(/[^a-zA-Z0-9]/g, '_')}_${state.currentStudentData.refNo.replace('/', '-')}.pdf` :
@@ -2716,16 +2786,27 @@
                 // Create a temporary element with single-page styling
                 const tempDiv = document.createElement('div');
                 tempDiv.style.position = 'fixed';
-                tempDiv.style.top = '0';
-                tempDiv.style.left = '0';
-                tempDiv.style.width = '21cm';
-                tempDiv.style.height = '29.7cm';
+                tempDiv.style.top = '-9999px';
+                tempDiv.style.left = '-9999px';
+                
+                // Use consistent pixel dimensions for A4 (210mm x 297mm at 96 DPI)
+                const a4WidthPx = 794;  // 210mm * 96DPI / 25.4
+                const a4HeightPx = 1123; // 297mm * 96DPI / 25.4
+                
+                tempDiv.style.width = a4WidthPx + 'px';
+                tempDiv.style.height = a4HeightPx + 'px';
                 tempDiv.style.backgroundColor = '#ffffff';
                 tempDiv.style.zIndex = '9999';
-                tempDiv.style.padding = '1cm';
-                tempDiv.style.margin = '0 auto';
+                tempDiv.style.padding = '37.8px'; // 1cm = 37.8px at 96 DPI
+                tempDiv.style.margin = '0';
                 tempDiv.style.boxSizing = 'border-box';
                 tempDiv.style.overflow = 'hidden';
+                tempDiv.style.fontSize = '16px'; // Ensure consistent font size
+                tempDiv.style.fontFamily = 'Times New Roman, serif';
+                tempDiv.style.transform = 'scale(1)'; // Reset any potential scaling
+                tempDiv.style.transformOrigin = 'top left';
+                tempDiv.style.color = '#000000'; // Ensure black text
+                tempDiv.style.background = '#ffffff'; // Force white background
                 
                 if (docType === 'Admission') {
                     // For admission letters, get only the first page and apply single-page class
@@ -2733,6 +2814,19 @@
                     if (firstPage) {
                         const clonedPage = firstPage.cloneNode(true);
                         clonedPage.classList.add('single-page');
+                        
+                        // Override any responsive styles for PDF generation
+                        clonedPage.style.width = '100%';
+                        clonedPage.style.height = '100%';
+                        clonedPage.style.minHeight = 'auto';
+                        clonedPage.style.maxWidth = 'none';
+                        clonedPage.style.margin = '0';
+                        clonedPage.style.padding = '37.8px'; // 1cm
+                        clonedPage.style.fontSize = '16px';
+                        clonedPage.style.fontFamily = 'Times New Roman, serif';
+                        clonedPage.style.boxSizing = 'border-box';
+                        clonedPage.style.transform = 'none';
+                        
                         tempDiv.appendChild(clonedPage);
                     }
                 } else {
@@ -2741,6 +2835,19 @@
                     if (bursaryPage) {
                         const clonedPage = bursaryPage.cloneNode(true);
                         clonedPage.classList.add('single-page');
+                        
+                        // Override any responsive styles for PDF generation
+                        clonedPage.style.width = '100%';
+                        clonedPage.style.height = '100%';
+                        clonedPage.style.minHeight = 'auto';
+                        clonedPage.style.maxWidth = 'none';
+                        clonedPage.style.margin = '0';
+                        clonedPage.style.padding = '37.8px'; // 1cm
+                        clonedPage.style.fontSize = '16px';
+                        clonedPage.style.fontFamily = 'Times New Roman, serif';
+                        clonedPage.style.boxSizing = 'border-box';
+                        clonedPage.style.transform = 'none';
+                        
                         tempDiv.appendChild(clonedPage);
                     }
                 }
@@ -2761,13 +2868,17 @@
                 
                 // Use html2canvas to capture the content
                 const canvas = await html2canvas(tempDiv, { 
-                    scale: 2, 
+                    scale: 1, // Use scale 1 for consistent results
                     useCORS: true,
                     allowTaint: true,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
+                    width: a4WidthPx,
+                    height: a4HeightPx,
+                    foreignObjectRendering: false, // Better compatibility
+                    removeContainer: false
                 });
                 
-                const imgData = canvas.toDataURL('image/png');
+                const imgData = canvas.toDataURL('image/png', 1.0);
                 
                 // Access jsPDF correctly with multiple fallback methods
                 let jsPDF;
@@ -2782,23 +2893,11 @@
                 }
                 
                 const pdf = new jsPDF('p', 'mm', 'a4');
-                const pageWidth = pdf.internal.pageSize.getWidth();
-                const pageHeight = pdf.internal.pageSize.getHeight();
+                const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
+                const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
 
-                // Calculate scale to fit width and height
-                const imgWidth = canvas.width;
-                const imgHeight = canvas.height;
-                const ratio = Math.min(pageWidth / (imgWidth * 0.264583), pageHeight / (imgHeight * 0.264583));
-
-                // Calculate actual dimensions in mm
-                const finalWidth = (imgWidth * 0.264583) * ratio;
-                const finalHeight = (imgHeight * 0.264583) * ratio;
-
-                // Centering
-                const x = (pageWidth - finalWidth) / 2;
-                const y = (pageHeight - finalHeight) / 2;
-
-                pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
+                // Use the full page size for consistent results across all devices
+                pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight, '', 'FAST');
                 
                 // Generate the PDF as a Blob
                 const pdfBlob = pdf.output('blob');
@@ -3035,19 +3134,31 @@
         async function generatePDFBlob(previewElement, docType, jsPDF) {
             return new Promise(async (resolve, reject) => {
                 try {
-                    // Create temporary element
+                    // Get device pixel ratio for consistent sizing across devices
+                    const devicePixelRatio = window.devicePixelRatio || 1;
+                    
+                    // Create temporary element with fixed size in pixels (A4 proportions)
                     const tempDiv = document.createElement('div');
                     tempDiv.style.position = 'fixed';
-                    tempDiv.style.top = '0';
-                    tempDiv.style.left = '0';
-                    tempDiv.style.width = '21cm';
-                    tempDiv.style.height = '29.7cm';
+                    tempDiv.style.top = '-9999px';
+                    tempDiv.style.left = '-9999px';
+                    
+                    // Use consistent pixel dimensions for A4 (210mm x 297mm at 96 DPI)
+                    const a4WidthPx = 794;  // 210mm * 96DPI / 25.4
+                    const a4HeightPx = 1123; // 297mm * 96DPI / 25.4
+                    
+                    tempDiv.style.width = a4WidthPx + 'px';
+                    tempDiv.style.height = a4HeightPx + 'px';
                     tempDiv.style.backgroundColor = '#ffffff';
                     tempDiv.style.zIndex = '9999';
-                    tempDiv.style.padding = '1cm';
-                    tempDiv.style.margin = '0 auto';
+                    tempDiv.style.padding = '37.8px'; // 1cm = 37.8px at 96 DPI
+                    tempDiv.style.margin = '0';
                     tempDiv.style.boxSizing = 'border-box';
                     tempDiv.style.overflow = 'hidden';
+                    tempDiv.style.fontSize = '16px'; // Ensure consistent font size
+                    tempDiv.style.fontFamily = 'Times New Roman, serif';
+                    tempDiv.style.transform = 'scale(1)'; // Reset any potential scaling
+                    tempDiv.style.transformOrigin = 'top left';
                     
                     // Clone content
                     const pageSelector = docType === 'admission' ? '.page.A4:first-child' : '.page.A4';
@@ -3055,44 +3166,61 @@
                     if (targetPage) {
                         const clonedPage = targetPage.cloneNode(true);
                         clonedPage.classList.add('single-page');
+                        
+                        // Override any responsive styles for PDF generation
+                        clonedPage.style.width = '100%';
+                        clonedPage.style.height = '100%';
+                        clonedPage.style.minHeight = 'auto';
+                        clonedPage.style.maxWidth = 'none';
+                        clonedPage.style.margin = '0';
+                        clonedPage.style.padding = '37.8px'; // 1cm
+                        clonedPage.style.fontSize = '16px';
+                        clonedPage.style.fontFamily = 'Times New Roman, serif';
+                        clonedPage.style.boxSizing = 'border-box';
+                        clonedPage.style.transform = 'none';
+                        clonedPage.style.backgroundColor = '#ffffff'; // Force white background
+                        clonedPage.style.background = '#ffffff'; // Additional background setting
+                        clonedPage.style.color = '#000000'; // Ensure black text
+                        
                         tempDiv.appendChild(clonedPage);
                     }
                     
                     document.body.appendChild(tempDiv);
                     
-                    // Wait for rendering
-                    await new Promise(resolve => setTimeout(resolve, 500));
+                    // Wait for rendering and font loading
+                    await new Promise(resolve => setTimeout(resolve, 1000));
                     
                     // Check html2canvas availability
                     if (!window.html2canvas) {
                         throw new Error('HTML2Canvas library not loaded');
                     }
                     
-                    // Generate canvas
+                    // Generate canvas with device-specific settings
                     const canvas = await html2canvas(tempDiv, {
-                        scale: 2,
+                        scale: 1, // Use scale 1 for consistent results
                         useCORS: true,
                         allowTaint: true,
-                        backgroundColor: '#ffffff'
+                        backgroundColor: '#ffffff', // Force white background
+                        width: a4WidthPx,
+                        height: a4HeightPx,
+                        foreignObjectRendering: false, // Better compatibility
+                        removeContainer: false,
+                        logging: false, // Disable logging
+                        onclone: function(clonedDoc) {
+                            // Ensure white background on cloned document
+                            clonedDoc.body.style.backgroundColor = '#ffffff';
+                            clonedDoc.body.style.background = '#ffffff';
+                        }
                     });
                     
-                    // Create PDF
-                    const imgData = canvas.toDataURL('image/png');
+                    // Create PDF with exact A4 dimensions
+                    const imgData = canvas.toDataURL('image/png', 1.0);
                     const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pageWidth = pdf.internal.pageSize.getWidth();
-                    const pageHeight = pdf.internal.pageSize.getHeight();
+                    const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
+                    const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
                     
-                    const imgWidth = canvas.width;
-                    const imgHeight = canvas.height;
-                    const ratio = Math.min(pageWidth / (imgWidth * 0.264583), pageHeight / (imgHeight * 0.264583));
-                    
-                    const finalWidth = (imgWidth * 0.264583) * ratio;
-                    const finalHeight = (imgHeight * 0.264583) * ratio;
-                    
-                    const x = (pageWidth - finalWidth) / 2;
-                    const y = (pageHeight - finalHeight) / 2;
-                    
-                    pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
+                    // Use the full page size for consistent results
+                    pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight, '', 'FAST');
                     const blob = pdf.output('blob');
                     
                     // Cleanup
@@ -3222,42 +3350,37 @@
                     return;
                 }
                 
-                // 1. Reset and populate the form with the student's text data
+                // ... existing code ...
                 resetGenerateForm();
                 generateForm.id.value = student.id;
                 generateForm.name.value = student.name;
                 generateForm.admNo.value = student.admNo;
                 generateForm.course.value = student.courseId;
-                await handleCourseChange(); // To update the requirements field
+                await handleCourseChange();
                 generateForm.reportDate.value = student.reportDate.split('T')[0];
                 generateForm.feeBalance.value = student.feeBalance;
                 generateForm.totalPerTerm.value = student.totalPerTerm;
                 generateForm.template.value = student.template;
                 generateForm.btnGenerate.textContent = 'Update Record';
 
-                // 2. Create a temporary data object for the preview.
-                //    Use the loaded student data, but overwrite images with the current app state.
                 const previewData = {
                     ...student,
                     headerImg: state.headerImageDataUrl,
                     stampImg: state.stampImageDataUrl,
-                    currentDate: formatDate(new Date()) // Use today's date for the preview
+                    currentDate: formatDate(new Date())
                 };
                 
-                // 3. Set this as the current student data and render the previews
                 state.currentStudentData = previewData;
                 renderAdmissionPages(previewData);
                 renderBursaryPage(previewData);
                 applyTemplateStyle();
                 
-                // Pre-generate PDFs for sharing
                 setTimeout(() => {
                     generatePDFsForSharing().catch(error => {
                         console.warn('Failed to pre-generate PDFs for sharing:', error);
                     });
                 }, 1000);
                 
-                // 4. Show action buttons and navigate
                 admissionActions.classList.remove('hidden');
                 bursaryActions.classList.remove('hidden');
                 navigateToView('viewGenerate');
@@ -3452,8 +3575,8 @@
 
         async function loadPermanentHeader() {
             try {
-                // Convert eavi.png to base64 for permanent storage
-                const response = await fetch('./eavi.png');
+                // Convert image.png to base64 for permanent storage
+                const response = await fetch('./image.png');
                 if (response.ok) {
                     const blob = await response.blob();
                     const reader = new FileReader();
@@ -3471,7 +3594,7 @@
                     };
                     reader.readAsDataURL(blob);
                 } else {
-                    console.warn('eavi.png not found, using default header handling');
+                    console.warn('image.png not found, using default header handling');
                 }
             } catch (error) {
                 console.warn('Could not load permanent header:', error);
