@@ -4,11 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EAVI Admission & Bursary System</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="./eavi.png">
-    <link rel="shortcut icon" type="image/png" href="./eavi.png">
-    <link rel="apple-touch-icon" href="./eavi.png">
 
     <!-- CDN Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVXM5BCClRCagvRMDCGkuVTzpbclw==" crossorigin="anonymous" referrerpolicy="no-referrer" onerror="loadHtml2CanvasBackup()"></script>
@@ -815,235 +810,172 @@
             }
         }
 
-        /* --- A4 PAGE RENDERING --- */
+        /* --- CLEAN PDF LAYOUT --- */
         .page {
             background: white;
             display: block;
             margin: 0 auto;
-            margin-bottom: 0.5cm;
-            box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
-            padding: 1cm;
+            margin-bottom: 1rem;
+            padding: 2rem;
             color: #000;
-            position: relative;
             font-size: 16px;
-            font-family: 'Times New Roman', serif;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .page.A4 {
-            width: 21cm;
-            min-height: 29.7cm;
-        }
-
-        /* Single page layout for printing and PDF generation */
-        .page.single-page {
-            width: 21cm;
-            height: 29.7cm;
             min-height: auto;
-            padding: 1cm;
-            font-size: 16px; /* Fixed font size for consistent PDF output */
-            box-sizing: border-box;
-            overflow: hidden;
-            margin: 0 auto;
-            background: white;
-            position: relative;
-            /* Force consistent rendering regardless of device */
-            -webkit-text-size-adjust: none;
-            text-size-adjust: none;
-            zoom: 1;
-            transform: scale(1);
-            transform-origin: top left;
-        }
-
-        /* Ensure consistent element sizing for PDF generation */
-        .single-page * {
-            -webkit-text-size-adjust: none;
-            text-size-adjust: none;
-            zoom: 1;
-        }
-
-        /* Force white background for PDF generation */
-        .single-page,
-        .single-page *,
-        .single-page .page,
-        .single-page .letter-body,
-        .single-page .letter-header,
-        .single-page .letter-footer {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            color: #000000 !important;
-        }
-
-        /* Ensure colored elements maintain their intended colors */
-        .single-page .student-name {
-            color: #27ae60 !important;
-        }
-        .single-page .course-name {
-            color: #8e44ad !important;
-        }
-        .single-page .admission-number {
-            color: #f39c12 !important;
-        }
-        .single-page .reporting-date {
-            color: #e74c3c !important;
-        }
-        .single-page .fee-amount {
-            color: #16a085 !important;
         }
 
         .page-header-img {
             display: block;
-            width: 15cm;
-            height: 4cm;
-            margin: 0 auto 0.3cm;
-            object-fit: contain;
-        }
-
-        .single-page .page-header-img {
-            height: 2.5cm;
-            margin: 0 auto 0.2cm;
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto 1.5rem;
         }
 
         .letter-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.5cm;
-            font-family: 'Courier New', Courier, monospace;
+            margin-bottom: 1.5rem;
             font-weight: bold;
-            color: #2c3e50;
-            font-size: 1.2em;
-        }
-
-        .single-page .letter-header {
-            margin-bottom: 0.3cm;
-            font-size: 1.0em;
+            color: #000;
+            font-size: 1rem;
+            flex-wrap: wrap;
         }
 
         .letter-body {
+            color: #000;
+            font-size: 1rem;
             line-height: 1.6;
-            color: #2c3e50;
-            font-size: 1.1em;
-        }
-
-        .single-page .letter-body {
-            line-height: 1.4;
-            font-size: 1.0em;
         }
 
         .letter-body h3 {
-            color: #3498db;
+            color: #000;
             text-decoration: underline;
-            margin-bottom: 1rem;
-            font-size: 1.4rem;
-            font-weight: bold;
-        }
-
-        .single-page .letter-body h3 {
-            margin-bottom: 0.3cm;
+            margin: 1.5rem 0 1rem 0;
             font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
         }
 
         .letter-body h4 {
-            color: #e74c3c;
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-            font-weight: bold;
-            border-bottom: 2px solid #e74c3c;
-            padding-bottom: 0.3rem;
-        }
-
-        .single-page .letter-body h4 {
-            margin-top: 0.5cm;
-            margin-bottom: 0.3cm;
+            color: #000;
+            margin: 1.5rem 0 1rem 0;
             font-size: 1.1rem;
+            font-weight: bold;
         }
 
         .letter-body p {
-            margin-bottom: 0.8rem;
-            text-align: justify;
-        }
-
-        .single-page .letter-body p {
-            margin-bottom: 0.25cm;
+            margin-bottom: 1rem;
+            text-align: left;
         }
 
         .letter-body ul {
-            margin-bottom: 0.8rem;
+            margin: 1rem 0;
+            padding-left: 2rem;
         }
 
-        .letter-body .student-name {
-            color: #27ae60;
+        .letter-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        .student-name,
+        .course-name,
+        .admission-number,
+        .reporting-date,
+        .fee-amount {
             font-weight: bold;
-            font-size: 1.2em;
         }
 
-        .letter-body .course-name {
-            color: #8e44ad;
-            font-weight: bold;
-            font-size: 1.15em;
-        }
-
-        .letter-body .admission-number {
-            color: #f39c12;
-            font-weight: bold;
-            font-size: 1.15em;
-        }
-
-        .letter-body .reporting-date {
-            color: #e74c3c;
-            font-weight: bold;
-            font-size: 1.15em;
-        }
-
-        .letter-body .fee-amount {
-            color: #16a085;
-            font-weight: bold;
-            font-size: 1.15em;
-        }
-
-        .letter-body .payment-details {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        .payment-details {
+            background: #f8f9fa;
             padding: 1rem;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
             margin: 1rem 0;
+            border: 1px solid #ddd;
         }
 
-        .single-page .letter-body .payment-details {
-            padding: 0.3cm;
-            margin: 0.3cm 0;
-        }
-
-        .letter-body .important-note {
-            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-            padding: 0.8rem;
-            border-radius: 6px;
-            border-left: 4px solid #f39c12;
-            margin: 1rem 0;
-            font-weight: 500;
-        }
-
-        .single-page .letter-body .important-note {
-            padding: 0.3cm;
-            margin: 0.3cm 0;
-        }
-
-        .letter-body .congratulations {
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        .important-note {
+            background: #fff3cd;
             padding: 1rem;
-            border-radius: 8px;
-            border-left: 4px solid #27ae60;
             margin: 1rem 0;
-            font-weight: 500;
+            border: 1px solid #ffeaa7;
         }
 
-        .single-page .letter-body .congratulations {
-            padding: 0.3cm;
-            margin: 0.3cm 0;
+        .congratulations {
+            background: #d4edda;
+            padding: 1rem;
+            margin: 1rem 0;
+            border: 1px solid #c3e6cb;
         }
 
-        .letter-body .details-block {
+        .details-block {
             margin: 1.5rem 0;
+        }
+
+        .letter-footer {
+            margin-top: 2rem;
+        }
+
+        .signature-section {
+            margin: 1rem 0;
+        }
+
+        .signature-spacing {
+            margin-top: 2rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .page {
+                padding: 1rem;
+                margin-bottom: 0.5rem;
+                font-size: 14px;
+            }
+            
+            .letter-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+            
+            .letter-body h3 {
+                font-size: 1.1rem;
+            }
+            
+            .letter-body h4 {
+                font-size: 1rem;
+            }
+            
+            .payment-details,
+            .important-note,
+            .congratulations {
+                padding: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page {
+                padding: 0.75rem;
+                font-size: 13px;
+            }
+            
+            .letter-body h3 {
+                font-size: 1rem;
+            }
+            
+            .letter-body h4 {
+                font-size: 0.95rem;
+            }
+            
+            .payment-details,
+            .important-note,
+            .congratulations {
+                padding: 0.5rem;
+            }
         }
 
         .single-page .letter-body .details-block {
@@ -1270,17 +1202,14 @@
                 width: 21cm !important;
                 height: 29.7cm !important;
                 max-height: 29.7cm !important;
-                padding: 1cm !important;
-                font-size: 16px !important; /* Consistent with non-print version */
-                line-height: 1.4 !important;
+                padding: 0.5cm 1cm !important;
+                font-size: 12px !important;
+                line-height: 1.3 !important;
                 overflow: hidden !important;
                 page-break-after: avoid !important;
                 page-break-inside: avoid !important;
                 transform: scale(1) !important;
                 transform-origin: top left !important;
-                -webkit-text-size-adjust: none !important;
-                text-size-adjust: none !important;
-                zoom: 1 !important;
             }
             
             .single-page .page-header-img {
@@ -1471,16 +1400,16 @@
     <div id="loginView">
         <div class="login-card">
             <h1>EAVI System</h1>
-            <p>Admission & Bursary Letter Generation</p>
+            <p>Select your campus to access the system</p>
             <div class="input-group">
                 <label for="adminType">Select Campus</label>
                 <select id="adminType" required>
                     <option value="">Choose Campus...</option>
-                    <option value="west">West Campus</option>
-                    <option value="town">Town Campus</option>
+                    <option value="west">West Campus Admin</option>
+                    <option value="town">Town Campus Admin</option>
                 </select>
             </div>
-            <button id="loginBtn">Access System</button>
+            <button id="loginBtn">Login</button>
             <p id="loginError"></p>
         </div>
     </div>
@@ -1547,7 +1476,7 @@
                             <input type="number" id="inpFeeBalance" value="0">
                         </div>
                         <div class="form-group">
-                            <label for="inpTotalPerTerm">Total Fees per Year (KES)</label>
+                            <label for="inpTotalPerTerm">Total Fees per Term (KES)</label>
                             <input type="number" id="inpTotalPerTerm" value="0">
                         </div>
                     </div>
@@ -1578,7 +1507,6 @@
                             <button id="btnResetForm" class="btn btn-secondary">🔄 Reset Form</button>
                         </div>
                         <p style="margin-top: 1rem; color: var(--text-light); font-size: 0.9rem;">Clicking 'Generate' will create both admission and bursary letters, save the student record, and take you to the view page.</p>
-                        <p style="margin-top: 0.5rem; color: var(--success-color); font-size: 0.85rem; font-weight: 500;">✓ PDF export now generates consistent A4 size across all devices (Windows & Mobile)</p>
                     </div>
                 </div>
             </div>
@@ -1703,7 +1631,14 @@
             <div id="viewSettings" class="view-content hidden">
                 <div class="card" style="max-width: 800px; margin: 0 auto;">
                     <h2 class="card-header">Courses & Fee Structure</h2>
-                    <p style="margin-bottom: 2rem; color: var(--dark-gray);"><strong>Fee Structure Rule:</strong> To add a course, you must upload the fee structure in PDF format. This will serve as the course requirements.</p>
+                    <p style="margin-bottom: 2rem; color: var(--dark-gray);"><strong>Fee Structure Rule:</strong> All fee structure files are loaded directly from the <code>fees/</code> folder in your project. To add a course, select the corresponding fee structure PDF from the dropdown. Files must be placed in the fees/ directory for them to appear in the selection.</p>
+                    
+                    <div class="card" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); margin-bottom: 2rem; border-left: 4px solid var(--success-color);">
+                        <h3 style="color: var(--success-color); margin-bottom: 1rem;">📁 Fee Structure Files Location</h3>
+                        <p style="margin-bottom: 1rem;"><strong>Files are loaded from:</strong> <code>fees/</code> folder</p>
+                        <p style="margin-bottom: 1rem;"><strong>Current files available:</strong> 11 PDF files detected</p>
+                        <p><strong>Note:</strong> Fee structure files are never stored in the database - they are always loaded directly from the fees/ folder to ensure data integrity and easy file management.</p>
+                    </div>
                     
                     <!-- Course Addition Helper -->
                     <div class="card" style="background: linear-gradient(135deg, var(--light-gray) 0%, #f1f5f9 100%); margin-bottom: 2rem; border-left: 4px solid var(--primary-color);">
@@ -1719,9 +1654,11 @@
                             <input type="text" id="courseName" required>
                         </div>
                         <div class="form-group">
-                            <label for="courseFeeStructure">Fee Structure (PDF only) <span style="color: red;">*</span></label>
-                            <input type="file" id="courseFeeStructure" accept=".pdf" required>
-                            <small style="color: var(--dark-gray); display: block; margin-top: 0.5rem;">Upload the course fee structure PDF. This will replace the requirements field.</small>
+                            <label for="courseFeeStructureSelect">Fee Structure (Select from fees/ folder) <span style="color: red;">*</span></label>
+                            <select id="courseFeeStructureSelect" required>
+                                <option value="">Select a fee structure PDF...</option>
+                            </select>
+                            <small style="color: var(--dark-gray); display: block; margin-top: 0.5rem;">Select the course fee structure PDF from the fees/ folder. Files must be placed in the fees/ directory.</small>
                         </div>
                         <button type="submit" class="btn btn-primary">Add Course</button>
                         <button type="button" id="cancelCourseEditBtn" class="btn btn-secondary hidden">Cancel Edit</button>
@@ -1789,8 +1726,6 @@
         const loginBtn = document.getElementById('loginBtn');
         const logoutBtn = document.getElementById('logoutBtn');
         const adminType = document.getElementById('adminType');
-        const loginUsername = document.getElementById('loginUsername');
-        const loginPassword = document.getElementById('loginPassword');
         const loginError = document.getElementById('loginError');
 
         const tabs = document.querySelectorAll('.nav-tab');
@@ -1866,19 +1801,12 @@
         async function loadInitialData() {
             await loadPersistedSettings();
             await loadCoursesAndDepartments();
+            await loadFeeStructureFiles();
             await loadStudentList();
             await updateDashboard();
         }
 
         // --- AUTHENTICATION ---
-        const adminCredentials = {
-            west: {
-                displayName: 'West Campus Admin'
-            },
-            town: {
-                displayName: 'Town Campus Admin'
-            }
-        };
 
         function handleLogin() {
             const campusType = adminType.value.trim();
@@ -1893,12 +1821,16 @@
                 return;
             }
             
-            // Set admin based on campus selection
-            const credentials = adminCredentials[campusType];
-            if (credentials) {
+            // Set admin info based on campus selection
+            const campusInfo = {
+                west: { displayName: 'West Campus Admin' },
+                town: { displayName: 'Town Campus Admin' }
+            };
+            
+            if (campusInfo[campusType]) {
                 state.currentAdmin = {
                     type: campusType,
-                    displayName: credentials.displayName
+                    displayName: campusInfo[campusType].displayName
                 };
                 sessionStorage.setItem('eaviAuth', 'true');
                 sessionStorage.setItem('eaviAdmin', JSON.stringify(state.currentAdmin));
@@ -2222,6 +2154,10 @@
             if (viewId === 'viewStudents') loadStudentList();
             if (viewId === 'viewAnalysis') updateAnalysisCharts();
             if (viewId === 'viewDashboard') updateDashboard();
+            if (viewId === 'viewSettings') {
+                loadCoursesAndDepartments();
+                loadFeeStructureFiles();
+            }
         }
 
         // --- GENERATE & PREVIEW LOGIC ---
@@ -2326,9 +2262,9 @@
                     ${renderHeader(data)}
                     <div class="letter-body">
                         <p>Dear Sir/Madam,</p>
-                        <p>&nbsp;</p>
+                        <br>
                         <h3>RE: ADMISSION LETTER</h3>
-                        <p>&nbsp;</p>
+                        <br>
                         <p>Name: <span class="student-name">${data.name.toUpperCase()}</span></p>
                         
                         <div class="congratulations">
@@ -2343,12 +2279,12 @@
                             <p><strong>Note:</strong> You are required to report immediately.</p>
                         </div>
                         
-                        <h4>💳 Fee Payment Details</h4>
+                        <h4>Fee Payment Details</h4>
                         <div class="payment-details">
                             <p><strong>East Africa Vision Institute</strong><br>
-                            📦 <strong>Equity Bank:</strong> Account No. <span class="fee-amount">0470292838961</span><br>
-                            🏦 <strong>KCB Bank:</strong> Account No. <span class="fee-amount">1115207350</span><br>
-                            📱 <strong>M-PESA Paybill:</strong> <span class="fee-amount">${paybillNumber}</span>, Account Number: <span class="student-name">${data.name.toUpperCase()}</span></p>
+                            <strong>Equity Bank:</strong> Account No. <span class="fee-amount">0470292838961</span><br>
+                            <strong>KCB Bank:</strong> Account No. <span class="fee-amount">1115207350</span><br>
+                            <strong>M-PESA Paybill:</strong> <span class="fee-amount">${paybillNumber}</span>, Account Number: <span class="student-name">${data.name.toUpperCase()}</span></p>
                         </div>
                         
                         <div class="important-note">
@@ -2370,8 +2306,8 @@
                 </div>
                 <div class="page A4 requirements-page">
                     <div class="letter-body">
-                        <h2 style="text-align: center; color: #3498db; text-decoration: underline; margin-bottom: 1.5cm;">📋 REQUIREMENTS</h2>
-                        <ul style="color: #2c3e50; line-height: 1.8;">${requirementsList}</ul>
+                        <h3>REQUIREMENTS</h3>
+                        <ul>${requirementsList}</ul>
                     </div>
                 </div>
             `;
@@ -2382,10 +2318,10 @@
                 <div class="page A4">
                     ${renderHeader(data)}
                     <div class="letter-body">
-                        <p><strong>THE CHAIRPERSON</strong><br><span style="color: #3498db; font-weight: bold;">BURSARY COMMITTEE</span></p>
-                        <p>&nbsp;</p>
+                        <p><strong>THE CHAIRPERSON</strong><br><span style="font-weight: bold;">BURSARY COMMITTEE</span></p>
+                        <br>
                         <p>Dear Sir/Madam,</p>
-                        <p>&nbsp;</p>
+                        <br>
                         <h3>RE: BURSARY SUPPORT REQUEST</h3>
                         
                         <div class="details-block">
@@ -2400,11 +2336,11 @@
                         
                         <p>The student has a fee balance of <span class="fee-amount">KES ${data.feeBalance.toLocaleString()}</span>. The total fees per term is <span class="fee-amount">KES ${data.totalPerTerm.toLocaleString()}</span>.</p>
                         
-                        <h4>💳 Fee Payment Details</h4>
+                        <h4>Fee Payment Details</h4>
                         <div class="payment-details">
                             <p><strong>East Africa Vision Institute</strong><br>
-                            📦 <strong>Equity Bank:</strong> Account No. <span class="fee-amount">0470292838961</span><br>
-                            🏦 <strong>KCB Bank:</strong> Account No. <span class="fee-amount">1115207350</span></p>
+                            <strong>Equity Bank:</strong> Account No. <span class="fee-amount">0470292838961</span><br>
+                            <strong>KCB Bank:</strong> Account No. <span class="fee-amount">1115207350</span></p>
                         </div>
                         
                         <div class="congratulations">
@@ -2462,9 +2398,9 @@
 
             try {
                 const course = await getByIdFromDB('courses', courseId);
-                if (course && course.feeStructurePdf) {
-                    // Set a placeholder text indicating fee structure is available
-                    generateForm.requirements.value = 'Fee structure available (PDF uploaded)';
+                if (course && course.feeStructurePdf && course.feeStructureFileName) {
+                    // Set a placeholder text indicating fee structure is available from fees/ folder
+                    generateForm.requirements.value = `Fee structure available: ${course.feeStructureFileName} (from fees/ folder)`;
                 } else {
                     generateForm.requirements.value = 'No fee structure uploaded for this course';
                 }
@@ -2515,7 +2451,7 @@
                 
                 if (course && course.feeStructurePdf) {
                     document.getElementById('feeStructureInfo').textContent = 
-                        `Fee structure available: ${course.feeStructureFileName || course.name + '_fee_structure.pdf'}`;
+                        `Fee structure available: ${course.feeStructureFileName || course.name + '_fee_structure.pdf'} (loaded from fees/ folder)`;
                     feeStructureSection.style.display = 'block';
                 } else {
                     feeStructureSection.style.display = 'none';
@@ -2532,18 +2468,18 @@
                 const course = await getByIdFromDB('courses', state.currentStudentData.courseId);
                 if (course && course.feeStructurePdf) {
                     const link = document.createElement('a');
-                    link.href = course.feeStructurePdf;
-                    link.download = `Fees-${course.name.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+                    link.href = course.feeStructurePdf; // This will be 'fees/filename.pdf'
+                    link.download = course.feeStructureFileName || `Fees-${course.name.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                    showToast('Fee structure downloaded.', 'success');
+                    showToast('Fee structure downloaded from fees/ folder.', 'success');
                 } else {
                     showToast('No fee structure available for this course.', 'error');
                 }
             } catch (error) {
                 console.error('Error downloading fee structure:', error);
-                showToast('Error downloading fee structure.', 'error');
+                showToast('Error downloading fee structure from fees/ folder.', 'error');
             }
         }
 
@@ -2614,33 +2550,19 @@
                 return;
             }
             
-            // Get device pixel ratio for consistent sizing across devices
-            const devicePixelRatio = window.devicePixelRatio || 1;
-            
-            // Create temporary element with fixed size in pixels (A4 proportions)
+            // Create a temporary element with single-page styling
             const tempDiv = document.createElement('div');
             tempDiv.style.position = 'fixed';
-            tempDiv.style.top = '-9999px';
-            tempDiv.style.left = '-9999px';
-            
-            // Use consistent pixel dimensions for A4 (210mm x 297mm at 96 DPI)
-            const a4WidthPx = 794;  // 210mm * 96DPI / 25.4
-            const a4HeightPx = 1123; // 297mm * 96DPI / 25.4
-            
-            tempDiv.style.width = a4WidthPx + 'px';
-            tempDiv.style.height = a4HeightPx + 'px';
+            tempDiv.style.top = '0';
+            tempDiv.style.left = '0';
+            tempDiv.style.width = '21cm';
+            tempDiv.style.height = '29.7cm';
             tempDiv.style.backgroundColor = '#ffffff';
             tempDiv.style.zIndex = '9999';
-            tempDiv.style.padding = '37.8px'; // 1cm = 37.8px at 96 DPI
-            tempDiv.style.margin = '0';
+            tempDiv.style.padding = '1cm';
+            tempDiv.style.margin = '0 auto';
             tempDiv.style.boxSizing = 'border-box';
             tempDiv.style.overflow = 'hidden';
-            tempDiv.style.fontSize = '16px'; // Ensure consistent font size
-            tempDiv.style.fontFamily = 'Times New Roman, serif';
-            tempDiv.style.transform = 'scale(1)'; // Reset any potential scaling
-            tempDiv.style.transformOrigin = 'top left';
-            tempDiv.style.color = '#000000'; // Ensure black text
-            tempDiv.style.background = '#ffffff'; // Force white background
             
             if (docType === 'Admission') {
                 // For admission letters, get only the first page and apply single-page class
@@ -2648,22 +2570,6 @@
                 if (firstPage) {
                     const clonedPage = firstPage.cloneNode(true);
                     clonedPage.classList.add('single-page');
-                    
-                    // Override any responsive styles for PDF generation
-                    clonedPage.style.width = '100%';
-                    clonedPage.style.height = '100%';
-                    clonedPage.style.minHeight = 'auto';
-                    clonedPage.style.maxWidth = 'none';
-                    clonedPage.style.margin = '0';
-                    clonedPage.style.padding = '37.8px'; // 1cm
-                    clonedPage.style.fontSize = '16px';
-                    clonedPage.style.fontFamily = 'Times New Roman, serif';
-                    clonedPage.style.boxSizing = 'border-box';
-                    clonedPage.style.transform = 'none';
-                    clonedPage.style.backgroundColor = '#ffffff'; // Force white background
-                    clonedPage.style.background = '#ffffff'; // Additional background setting
-                    clonedPage.style.color = '#000000'; // Ensure black text
-                    
                     tempDiv.appendChild(clonedPage);
                 }
             } else {
@@ -2672,22 +2578,6 @@
                 if (bursaryPage) {
                     const clonedPage = bursaryPage.cloneNode(true);
                     clonedPage.classList.add('single-page');
-                    
-                    // Override any responsive styles for PDF generation
-                    clonedPage.style.width = '100%';
-                    clonedPage.style.height = '100%';
-                    clonedPage.style.minHeight = 'auto';
-                    clonedPage.style.maxWidth = 'none';
-                    clonedPage.style.margin = '0';
-                    clonedPage.style.padding = '37.8px'; // 1cm
-                    clonedPage.style.fontSize = '16px';
-                    clonedPage.style.fontFamily = 'Times New Roman, serif';
-                    clonedPage.style.boxSizing = 'border-box';
-                    clonedPage.style.transform = 'none';
-                    clonedPage.style.backgroundColor = '#ffffff'; // Force white background
-                    clonedPage.style.background = '#ffffff'; // Additional background setting
-                    clonedPage.style.color = '#000000'; // Ensure black text
-                    
                     tempDiv.appendChild(clonedPage);
                 }
             }
@@ -2708,22 +2598,12 @@
                 
                 // Use html2canvas to capture the content
                 html2canvas(tempDiv, { 
-                    scale: 1, // Use scale 1 for consistent results
+                    scale: 2, 
                     useCORS: true,
                     allowTaint: true,
-                    backgroundColor: '#ffffff', // Force white background
-                    width: a4WidthPx,
-                    height: a4HeightPx,
-                    foreignObjectRendering: false, // Better compatibility
-                    removeContainer: false,
-                    logging: false, // Disable logging
-                    onclone: function(clonedDoc) {
-                        // Ensure white background on cloned document
-                        clonedDoc.body.style.backgroundColor = '#ffffff';
-                        clonedDoc.body.style.background = '#ffffff';
-                    }
+                    backgroundColor: '#ffffff'
                 }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png', 1.0);
+                    const imgData = canvas.toDataURL('image/png');
                     
                     // Access jsPDF correctly with multiple fallback methods
                     let jsPDF;
@@ -2738,11 +2618,23 @@
                     }
                     
                     const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
-                    const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+                    const pageWidth = pdf.internal.pageSize.getWidth();
+                    const pageHeight = pdf.internal.pageSize.getHeight();
 
-                    // Use the full page size for consistent results across all devices
-                    pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight, '', 'FAST');
+                    // Calculate scale to fit width and height
+                    const imgWidth = canvas.width;
+                    const imgHeight = canvas.height;
+                    const ratio = Math.min(pageWidth / (imgWidth * 0.264583), pageHeight / (imgHeight * 0.264583));
+
+                    // Calculate actual dimensions in mm
+                    const finalWidth = (imgWidth * 0.264583) * ratio;
+                    const finalHeight = (imgHeight * 0.264583) * ratio;
+
+                    // Centering
+                    const x = (pageWidth - finalWidth) / 2;
+                    const y = (pageHeight - finalHeight) / 2;
+
+                    pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
                     
                     const fileName = docType === 'Admission' ? 
                         `Admission_Letter_${state.currentStudentData.name.replace(/[^a-zA-Z0-9]/g, '_')}_${state.currentStudentData.refNo.replace('/', '-')}.pdf` :
@@ -2786,27 +2678,16 @@
                 // Create a temporary element with single-page styling
                 const tempDiv = document.createElement('div');
                 tempDiv.style.position = 'fixed';
-                tempDiv.style.top = '-9999px';
-                tempDiv.style.left = '-9999px';
-                
-                // Use consistent pixel dimensions for A4 (210mm x 297mm at 96 DPI)
-                const a4WidthPx = 794;  // 210mm * 96DPI / 25.4
-                const a4HeightPx = 1123; // 297mm * 96DPI / 25.4
-                
-                tempDiv.style.width = a4WidthPx + 'px';
-                tempDiv.style.height = a4HeightPx + 'px';
+                tempDiv.style.top = '0';
+                tempDiv.style.left = '0';
+                tempDiv.style.width = '21cm';
+                tempDiv.style.height = '29.7cm';
                 tempDiv.style.backgroundColor = '#ffffff';
                 tempDiv.style.zIndex = '9999';
-                tempDiv.style.padding = '37.8px'; // 1cm = 37.8px at 96 DPI
-                tempDiv.style.margin = '0';
+                tempDiv.style.padding = '1cm';
+                tempDiv.style.margin = '0 auto';
                 tempDiv.style.boxSizing = 'border-box';
                 tempDiv.style.overflow = 'hidden';
-                tempDiv.style.fontSize = '16px'; // Ensure consistent font size
-                tempDiv.style.fontFamily = 'Times New Roman, serif';
-                tempDiv.style.transform = 'scale(1)'; // Reset any potential scaling
-                tempDiv.style.transformOrigin = 'top left';
-                tempDiv.style.color = '#000000'; // Ensure black text
-                tempDiv.style.background = '#ffffff'; // Force white background
                 
                 if (docType === 'Admission') {
                     // For admission letters, get only the first page and apply single-page class
@@ -2814,19 +2695,6 @@
                     if (firstPage) {
                         const clonedPage = firstPage.cloneNode(true);
                         clonedPage.classList.add('single-page');
-                        
-                        // Override any responsive styles for PDF generation
-                        clonedPage.style.width = '100%';
-                        clonedPage.style.height = '100%';
-                        clonedPage.style.minHeight = 'auto';
-                        clonedPage.style.maxWidth = 'none';
-                        clonedPage.style.margin = '0';
-                        clonedPage.style.padding = '37.8px'; // 1cm
-                        clonedPage.style.fontSize = '16px';
-                        clonedPage.style.fontFamily = 'Times New Roman, serif';
-                        clonedPage.style.boxSizing = 'border-box';
-                        clonedPage.style.transform = 'none';
-                        
                         tempDiv.appendChild(clonedPage);
                     }
                 } else {
@@ -2835,19 +2703,6 @@
                     if (bursaryPage) {
                         const clonedPage = bursaryPage.cloneNode(true);
                         clonedPage.classList.add('single-page');
-                        
-                        // Override any responsive styles for PDF generation
-                        clonedPage.style.width = '100%';
-                        clonedPage.style.height = '100%';
-                        clonedPage.style.minHeight = 'auto';
-                        clonedPage.style.maxWidth = 'none';
-                        clonedPage.style.margin = '0';
-                        clonedPage.style.padding = '37.8px'; // 1cm
-                        clonedPage.style.fontSize = '16px';
-                        clonedPage.style.fontFamily = 'Times New Roman, serif';
-                        clonedPage.style.boxSizing = 'border-box';
-                        clonedPage.style.transform = 'none';
-                        
                         tempDiv.appendChild(clonedPage);
                     }
                 }
@@ -2868,17 +2723,13 @@
                 
                 // Use html2canvas to capture the content
                 const canvas = await html2canvas(tempDiv, { 
-                    scale: 1, // Use scale 1 for consistent results
+                    scale: 2, 
                     useCORS: true,
                     allowTaint: true,
-                    backgroundColor: '#ffffff',
-                    width: a4WidthPx,
-                    height: a4HeightPx,
-                    foreignObjectRendering: false, // Better compatibility
-                    removeContainer: false
+                    backgroundColor: '#ffffff'
                 });
                 
-                const imgData = canvas.toDataURL('image/png', 1.0);
+                const imgData = canvas.toDataURL('image/png');
                 
                 // Access jsPDF correctly with multiple fallback methods
                 let jsPDF;
@@ -2893,11 +2744,23 @@
                 }
                 
                 const pdf = new jsPDF('p', 'mm', 'a4');
-                const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
-                const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
 
-                // Use the full page size for consistent results across all devices
-                pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight, '', 'FAST');
+                // Calculate scale to fit width and height
+                const imgWidth = canvas.width;
+                const imgHeight = canvas.height;
+                const ratio = Math.min(pageWidth / (imgWidth * 0.264583), pageHeight / (imgHeight * 0.264583));
+
+                // Calculate actual dimensions in mm
+                const finalWidth = (imgWidth * 0.264583) * ratio;
+                const finalHeight = (imgHeight * 0.264583) * ratio;
+
+                // Centering
+                const x = (pageWidth - finalWidth) / 2;
+                const y = (pageHeight - finalHeight) / 2;
+
+                pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
                 
                 // Generate the PDF as a Blob
                 const pdfBlob = pdf.output('blob');
@@ -3089,11 +2952,12 @@
                 const course = await getByIdFromDB('courses', state.currentStudentData.courseId);
                 if (course && course.feeStructurePdf) {
                     try {
+                        // Load fee structure from fees/ folder
                         const feeStructureBlob = await fetch(course.feeStructurePdf).then(res => res.blob());
-                        const feeStructureFile = new File([feeStructureBlob], 'Fees.pdf', { type: 'application/pdf' });
+                        const feeStructureFile = new File([feeStructureBlob], course.feeStructureFileName || 'Fees.pdf', { type: 'application/pdf' });
                         files.push(feeStructureFile);
                     } catch (feeError) {
-                        console.warn('Could not load fee structure PDF:', feeError);
+                        console.warn('Could not load fee structure PDF from fees/ folder:', feeError);
                     }
                 }
 
@@ -3134,31 +2998,19 @@
         async function generatePDFBlob(previewElement, docType, jsPDF) {
             return new Promise(async (resolve, reject) => {
                 try {
-                    // Get device pixel ratio for consistent sizing across devices
-                    const devicePixelRatio = window.devicePixelRatio || 1;
-                    
-                    // Create temporary element with fixed size in pixels (A4 proportions)
+                    // Create temporary element
                     const tempDiv = document.createElement('div');
                     tempDiv.style.position = 'fixed';
-                    tempDiv.style.top = '-9999px';
-                    tempDiv.style.left = '-9999px';
-                    
-                    // Use consistent pixel dimensions for A4 (210mm x 297mm at 96 DPI)
-                    const a4WidthPx = 794;  // 210mm * 96DPI / 25.4
-                    const a4HeightPx = 1123; // 297mm * 96DPI / 25.4
-                    
-                    tempDiv.style.width = a4WidthPx + 'px';
-                    tempDiv.style.height = a4HeightPx + 'px';
+                    tempDiv.style.top = '0';
+                    tempDiv.style.left = '0';
+                    tempDiv.style.width = '21cm';
+                    tempDiv.style.height = '29.7cm';
                     tempDiv.style.backgroundColor = '#ffffff';
                     tempDiv.style.zIndex = '9999';
-                    tempDiv.style.padding = '37.8px'; // 1cm = 37.8px at 96 DPI
-                    tempDiv.style.margin = '0';
+                    tempDiv.style.padding = '1cm';
+                    tempDiv.style.margin = '0 auto';
                     tempDiv.style.boxSizing = 'border-box';
                     tempDiv.style.overflow = 'hidden';
-                    tempDiv.style.fontSize = '16px'; // Ensure consistent font size
-                    tempDiv.style.fontFamily = 'Times New Roman, serif';
-                    tempDiv.style.transform = 'scale(1)'; // Reset any potential scaling
-                    tempDiv.style.transformOrigin = 'top left';
                     
                     // Clone content
                     const pageSelector = docType === 'admission' ? '.page.A4:first-child' : '.page.A4';
@@ -3166,61 +3018,44 @@
                     if (targetPage) {
                         const clonedPage = targetPage.cloneNode(true);
                         clonedPage.classList.add('single-page');
-                        
-                        // Override any responsive styles for PDF generation
-                        clonedPage.style.width = '100%';
-                        clonedPage.style.height = '100%';
-                        clonedPage.style.minHeight = 'auto';
-                        clonedPage.style.maxWidth = 'none';
-                        clonedPage.style.margin = '0';
-                        clonedPage.style.padding = '37.8px'; // 1cm
-                        clonedPage.style.fontSize = '16px';
-                        clonedPage.style.fontFamily = 'Times New Roman, serif';
-                        clonedPage.style.boxSizing = 'border-box';
-                        clonedPage.style.transform = 'none';
-                        clonedPage.style.backgroundColor = '#ffffff'; // Force white background
-                        clonedPage.style.background = '#ffffff'; // Additional background setting
-                        clonedPage.style.color = '#000000'; // Ensure black text
-                        
                         tempDiv.appendChild(clonedPage);
                     }
                     
                     document.body.appendChild(tempDiv);
                     
-                    // Wait for rendering and font loading
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    // Wait for rendering
+                    await new Promise(resolve => setTimeout(resolve, 500));
                     
                     // Check html2canvas availability
                     if (!window.html2canvas) {
                         throw new Error('HTML2Canvas library not loaded');
                     }
                     
-                    // Generate canvas with device-specific settings
+                    // Generate canvas
                     const canvas = await html2canvas(tempDiv, {
-                        scale: 1, // Use scale 1 for consistent results
+                        scale: 2,
                         useCORS: true,
                         allowTaint: true,
-                        backgroundColor: '#ffffff', // Force white background
-                        width: a4WidthPx,
-                        height: a4HeightPx,
-                        foreignObjectRendering: false, // Better compatibility
-                        removeContainer: false,
-                        logging: false, // Disable logging
-                        onclone: function(clonedDoc) {
-                            // Ensure white background on cloned document
-                            clonedDoc.body.style.backgroundColor = '#ffffff';
-                            clonedDoc.body.style.background = '#ffffff';
-                        }
+                        backgroundColor: '#ffffff'
                     });
                     
-                    // Create PDF with exact A4 dimensions
-                    const imgData = canvas.toDataURL('image/png', 1.0);
+                    // Create PDF
+                    const imgData = canvas.toDataURL('image/png');
                     const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
-                    const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+                    const pageWidth = pdf.internal.pageSize.getWidth();
+                    const pageHeight = pdf.internal.pageSize.getHeight();
                     
-                    // Use the full page size for consistent results
-                    pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight, '', 'FAST');
+                    const imgWidth = canvas.width;
+                    const imgHeight = canvas.height;
+                    const ratio = Math.min(pageWidth / (imgWidth * 0.264583), pageHeight / (imgHeight * 0.264583));
+                    
+                    const finalWidth = (imgWidth * 0.264583) * ratio;
+                    const finalHeight = (imgHeight * 0.264583) * ratio;
+                    
+                    const x = (pageWidth - finalWidth) / 2;
+                    const y = (pageHeight - finalHeight) / 2;
+                    
+                    pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
                     const blob = pdf.output('blob');
                     
                     // Cleanup
@@ -3350,37 +3185,42 @@
                     return;
                 }
                 
-                // ... existing code ...
+                // 1. Reset and populate the form with the student's text data
                 resetGenerateForm();
                 generateForm.id.value = student.id;
                 generateForm.name.value = student.name;
                 generateForm.admNo.value = student.admNo;
                 generateForm.course.value = student.courseId;
-                await handleCourseChange();
+                await handleCourseChange(); // To update the requirements field
                 generateForm.reportDate.value = student.reportDate.split('T')[0];
                 generateForm.feeBalance.value = student.feeBalance;
                 generateForm.totalPerTerm.value = student.totalPerTerm;
                 generateForm.template.value = student.template;
                 generateForm.btnGenerate.textContent = 'Update Record';
 
+                // 2. Create a temporary data object for the preview.
+                //    Use the loaded student data, but overwrite images with the current app state.
                 const previewData = {
                     ...student,
                     headerImg: state.headerImageDataUrl,
                     stampImg: state.stampImageDataUrl,
-                    currentDate: formatDate(new Date())
+                    currentDate: formatDate(new Date()) // Use today's date for the preview
                 };
                 
+                // 3. Set this as the current student data and render the previews
                 state.currentStudentData = previewData;
                 renderAdmissionPages(previewData);
                 renderBursaryPage(previewData);
                 applyTemplateStyle();
                 
+                // Pre-generate PDFs for sharing
                 setTimeout(() => {
                     generatePDFsForSharing().catch(error => {
                         console.warn('Failed to pre-generate PDFs for sharing:', error);
                     });
                 }, 1000);
                 
+                // 4. Show action buttons and navigate
                 admissionActions.classList.remove('hidden');
                 bursaryActions.classList.remove('hidden');
                 navigateToView('viewGenerate');
@@ -3632,6 +3472,38 @@
             }
         }
 
+        // --- FEE STRUCTURE MANAGEMENT ---
+        async function loadFeeStructureFiles() {
+            const feeStructureSelect = document.getElementById('courseFeeStructureSelect');
+            if (!feeStructureSelect) return;
+            
+            // Clear existing options except the first one
+            feeStructureSelect.innerHTML = '<option value="">Select a fee structure PDF...</option>';
+            
+            // List of fee structure files available in the fees/ folder
+            const feeStructureFiles = [
+                'Business course .pdf',
+                'CamScanner 09-04-2025 15.55 (1).pdf',
+                'beauty.pdf',
+                'community health .pdf',
+                'counseling psychology .pdf',
+                'health services support .pdf',
+                'lab technology .pdf',
+                'medical lab.pdf',
+                'medical laboratory .pdf',
+                'opthopedic.pdf',
+                'peri.pdf'
+            ];
+            
+            // Add options for each file
+            feeStructureFiles.forEach(fileName => {
+                const option = document.createElement('option');
+                option.value = fileName;
+                option.textContent = fileName;
+                feeStructureSelect.appendChild(option);
+            });
+        }
+
         // --- SETTINGS ---
         async function loadCoursesAndDepartments() {
             const courses = await getAllFromDB('courses');
@@ -3672,7 +3544,7 @@
         async function handleAddCourse(e) {
             e.preventDefault();
             const name = document.getElementById('courseName').value.trim();
-            const feeStructureFile = document.getElementById('courseFeeStructure').files[0];
+            const feeStructureFileName = document.getElementById('courseFeeStructureSelect').value;
             
             if (!name) {
                 showToast('Course name is required.', 'error');
@@ -3682,28 +3554,23 @@
             const editingId = document.getElementById('editingCourseId').value;
             
             // For new courses, fee structure is required
-            if (!editingId && !feeStructureFile) {
+            if (!editingId && !feeStructureFileName) {
                 showToast('Fee structure PDF is required for new courses.', 'error');
                 return;
             }
 
-            let feeStructurePdf = null;
-            if (feeStructureFile) {
-                // Convert file to base64
-                feeStructurePdf = await fileToBase64(feeStructureFile);
-            }
-
             const courseData = { name };
-            if (feeStructurePdf) {
-                courseData.feeStructurePdf = feeStructurePdf;
-                courseData.feeStructureFileName = feeStructureFile.name;
+            if (feeStructureFileName) {
+                // Store the filename to reference files from fees/ folder
+                courseData.feeStructureFileName = feeStructureFileName;
+                courseData.feeStructurePdf = `fees/${feeStructureFileName}`; // Path to fee structure in fees folder
             }
 
             try {
                 if (editingId) {
                     courseData.id = parseInt(editingId);
-                    // If editing and no new file, keep existing file
-                    if (!feeStructurePdf) {
+                    // If editing and no new file selected, keep existing file
+                    if (!feeStructureFileName) {
                         const existingCourse = await getByIdFromDB('courses', courseData.id);
                         courseData.feeStructurePdf = existingCourse.feeStructurePdf;
                         courseData.feeStructureFileName = existingCourse.feeStructureFileName;
@@ -3740,9 +3607,9 @@
             submitBtn.classList.add('btn-primary');
             document.getElementById('cancelCourseEditBtn').classList.add('hidden');
             
-            // Reset file input requirement
-            const fileInput = document.getElementById('courseFeeStructure');
-            fileInput.required = true;
+            // Reset fee structure selection requirement
+            const feeStructureSelect = document.getElementById('courseFeeStructureSelect');
+            feeStructureSelect.required = true;
         }
 
         async function handleEditCourse(id) {
@@ -3751,9 +3618,12 @@
                 document.getElementById('editingCourseId').value = course.id;
                 document.getElementById('courseName').value = course.name;
                 
-                // Make file input optional for editing
-                const fileInput = document.getElementById('courseFeeStructure');
-                fileInput.required = false;
+                // Make fee structure selection optional for editing and set current value
+                const feeStructureSelect = document.getElementById('courseFeeStructureSelect');
+                feeStructureSelect.required = false;
+                if (course.feeStructureFileName) {
+                    feeStructureSelect.value = course.feeStructureFileName;
+                }
                 
                 const submitBtn = document.querySelector('#courseForm button[type="submit"]');
                 submitBtn.textContent = 'Update Course';
