@@ -840,10 +840,14 @@
             width: 210mm;
             height: 297mm;
             box-sizing: border-box;
+            overflow: hidden;
+            page-break-after: always;
+            page-break-inside: avoid;
         }
 
         .page.A4 {
             min-height: 297mm;
+            max-height: 297mm;
         }
 
         .page-header-img {
@@ -851,6 +855,7 @@
             max-width: 100%;
             height: auto;
             margin: 0 auto 1.5rem;
+            max-height: 4cm;
         }
 
         .letter-header {
@@ -934,6 +939,7 @@
 
         .letter-footer {
             margin-top: 2rem;
+            position: relative;
         }
 
         .signature-section {
@@ -950,6 +956,11 @@
                 padding: 1rem;
                 margin-bottom: 0.5rem;
                 font-size: 14px;
+                width: 210mm;
+                height: 297mm;
+                max-width: 210mm;
+                min-height: 297mm;
+                max-height: 297mm;
             }
             
             .letter-header {
@@ -977,6 +988,11 @@
             .page {
                 padding: 0.75rem;
                 font-size: 13px;
+                width: 210mm;
+                height: 297mm;
+                max-width: 210mm;
+                min-height: 297mm;
+                max-height: 297mm;
             }
             
             .letter-body h3 {
@@ -1071,12 +1087,14 @@
                 height: 297mm;
                 max-width: 210mm;
                 min-height: 297mm;
+                max-height: 297mm;
             }
             
             .page.A4 {
                 width: calc(100vw - 2rem);
                 max-width: 210mm;
                 min-height: 297mm;
+                max-height: 297mm;
             }
             
             .page-header-img {
@@ -1109,12 +1127,14 @@
                 height: 297mm;
                 max-width: 210mm;
                 min-height: 297mm;
+                max-height: 297mm;
             }
             
             .page.A4 {
                 width: calc(100vw - 1.5rem);
                 max-width: 210mm;
                 min-height: 297mm;
+                max-height: 297mm;
             }
             
             .page-header-img {
@@ -1240,7 +1260,8 @@
                 border: none;
                 width: 21cm;
                 height: 29.7cm;
-                page-break-after: avoid;
+                max-height: 29.7cm;
+                page-break-after: always;
                 page-break-inside: avoid;
                 overflow: hidden;
             }
@@ -1253,7 +1274,7 @@
                 font-size: 12px !important;
                 line-height: 1.3 !important;
                 overflow: hidden !important;
-                page-break-after: avoid !important;
+                page-break-after: always !important;
                 page-break-inside: avoid !important;
                 transform: scale(1) !important;
                 transform-origin: top left !important;
@@ -1350,19 +1371,8 @@
             .congratulations,
             .important-note,
             .payment-details {
-                -webkit-print-color-adjust: exact;
-                color-adjust: exact;
-            }
-            
-            /* Ensure all content is visible during print */
-            * {
-                visibility: visible !important;
-                display: block !important;
-            }
-            
-            /* But hide specific UI elements */
-            .no-print, .navbar, .preview-container {
-                display: none !important;
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
             }
         }
 
@@ -2637,6 +2647,8 @@
                     clonedPage.style.minHeight = '277mm';
                     clonedPage.style.maxHeight = '277mm';
                     clonedPage.style.overflow = 'hidden';
+                    clonedPage.style.pageBreakAfter = 'always';
+                    clonedPage.style.pageBreakInside = 'avoid';
                     tempDiv.appendChild(clonedPage);
                 }
             } else {
@@ -2650,6 +2662,8 @@
                     clonedPage.style.minHeight = '277mm';
                     clonedPage.style.maxHeight = '277mm';
                     clonedPage.style.overflow = 'hidden';
+                    clonedPage.style.pageBreakAfter = 'always';
+                    clonedPage.style.pageBreakInside = 'avoid';
                     tempDiv.appendChild(clonedPage);
                 }
             }
@@ -2779,6 +2793,8 @@
                         clonedPage.style.minHeight = '277mm';
                         clonedPage.style.maxHeight = '277mm';
                         clonedPage.style.overflow = 'hidden';
+                        clonedPage.style.pageBreakAfter = 'always';
+                        clonedPage.style.pageBreakInside = 'avoid';
                         tempDiv.appendChild(clonedPage);
                     }
                 } else {
@@ -2792,6 +2808,8 @@
                         clonedPage.style.minHeight = '277mm';
                         clonedPage.style.maxHeight = '277mm';
                         clonedPage.style.overflow = 'hidden';
+                        clonedPage.style.pageBreakAfter = 'always';
+                        clonedPage.style.pageBreakInside = 'avoid';
                         tempDiv.appendChild(clonedPage);
                     }
                 }
@@ -3119,6 +3137,8 @@
                         clonedPage.style.minHeight = '277mm';
                         clonedPage.style.maxHeight = '277mm';
                         clonedPage.style.overflow = 'hidden';
+                        clonedPage.style.pageBreakAfter = 'always';
+                        clonedPage.style.pageBreakInside = 'avoid';
                         tempDiv.appendChild(clonedPage);
                     }
                     
