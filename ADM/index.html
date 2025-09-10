@@ -1804,19 +1804,24 @@
 
         // --- INITIALIZATION ---
         function init() {
+            console.log('Initializing app...');
             if (sessionStorage.getItem('eaviAuth') === 'true') {
+                console.log('User is authenticated');
                 // Restore admin info
                 const adminInfo = sessionStorage.getItem('eaviAdmin');
                 if (adminInfo) {
                     state.currentAdmin = JSON.parse(adminInfo);
+                    console.log('Restored admin info:', state.currentAdmin);
                 }
                 showApp();
             } else {
+                console.log('User is not authenticated, showing login');
                 showLogin();
             }
         }
 
         async function showApp() {
+            console.log('Showing app view');
             loginView.classList.add('hidden');
             appView.classList.remove('hidden');
             
@@ -1835,6 +1840,7 @@
         }
 
         function showLogin() {
+            console.log('Showing login view');
             loginView.classList.remove('hidden');
             appView.classList.add('hidden');
             
@@ -1842,7 +1848,10 @@
             adminType.value = '';
             loginError.textContent = '';
             
-            loginBtn.addEventListener('click', handleLogin, { once: true });
+            // Remove any existing event listeners to prevent duplicates
+            loginBtn.removeEventListener('click', handleLogin);
+            // Add event listener without { once: true } to ensure it persists
+            loginBtn.addEventListener('click', handleLogin);
         }
 
         async function loadInitialData() {
@@ -1856,35 +1865,38 @@
         // --- AUTHENTICATION ---
 
         function handleLogin() {
-            const campusType = adminType.value.trim();
-            
-            // Clear previous error
-            loginError.textContent = '';
-            
-            // Validate campus selection
-            if (!campusType) {
-                loginError.textContent = 'Please select a campus.';
-                loginBtn.addEventListener('click', handleLogin, { once: true });
-                return;
-            }
-            
-            // Set admin info based on campus selection
-            const campusInfo = {
-                west: { displayName: 'West Campus Admin' },
-                town: { displayName: 'Town Campus Admin' }
-            };
-            
-            if (campusInfo[campusType]) {
-                state.currentAdmin = {
-                    type: campusType,
-                    displayName: campusInfo[campusType].displayName
+            try {
+                const campusType = adminType.value.trim();
+                
+                // Clear previous error
+                loginError.textContent = '';
+                
+                // Validate campus selection
+                if (!campusType) {
+                    loginError.textContent = 'Please select a campus.';
+                    return;
+                }
+                
+                // Set admin info based on campus selection
+                const campusInfo = {
+                    west: { displayName: 'West Campus Admin' },
+                    town: { displayName: 'Town Campus Admin' }
                 };
-                sessionStorage.setItem('eaviAuth', 'true');
-                sessionStorage.setItem('eaviAdmin', JSON.stringify(state.currentAdmin));
-                showApp();
-            } else {
-                loginError.textContent = 'Invalid campus selection.';
-                loginBtn.addEventListener('click', handleLogin, { once: true });
+                
+                if (campusInfo[campusType]) {
+                    state.currentAdmin = {
+                        type: campusType,
+                        displayName: campusInfo[campusType].displayName
+                    };
+                    sessionStorage.setItem('eaviAuth', 'true');
+                    sessionStorage.setItem('eaviAdmin', JSON.stringify(state.currentAdmin));
+                    showApp();
+                } else {
+                    loginError.textContent = 'Invalid campus selection.';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                loginError.textContent = 'An error occurred during login. Please try again.';
             }
         }
 
