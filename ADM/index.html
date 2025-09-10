@@ -808,6 +808,22 @@
             #viewGenerate .grid-2 {
                 grid-template-columns: 1fr;
             }
+
+            /* Mobile A4 page adjustments */
+            .page {
+                padding: 10mm;
+                font-size: 14px;
+                margin-bottom: 0.25cm;
+                box-shadow: 0 0 0.25cm rgba(0,0,0,0.3);
+                width: 210mm;
+                height: 297mm;
+            }
+            
+            .page.A4 {
+                width: calc(100vw - 2rem);
+                max-width: 210mm;
+                min-height: 297mm;
+            }
         }
 
         /* --- CLEAN PDF LAYOUT --- */
@@ -816,18 +832,18 @@
             display: block;
             margin: 0 auto;
             margin-bottom: 1rem;
-            padding: 2rem;
+            padding: 10mm;
             color: #000;
             font-size: 16px;
             font-family: Arial, sans-serif;
             line-height: 1.6;
-            max-width: 800px;
-            width: 100%;
+            width: 210mm;
+            height: 297mm;
             box-sizing: border-box;
         }
 
         .page.A4 {
-            min-height: auto;
+            min-height: 297mm;
         }
 
         .page-header-img {
@@ -2531,7 +2547,7 @@
                 filename: fileName,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
         }
 
@@ -2680,15 +2696,16 @@
                 tempDiv.style.position = 'fixed';
                 tempDiv.style.top = '0';
                 tempDiv.style.left = '0';
-                tempDiv.style.width = '21cm';
-                tempDiv.style.height = '29.7cm';
+                tempDiv.style.width = '210mm';
+                tempDiv.style.height = '297mm';
                 tempDiv.style.backgroundColor = '#ffffff';
                 tempDiv.style.zIndex = '9999';
-                tempDiv.style.padding = '1cm';
+                tempDiv.style.padding = '10mm';
                 tempDiv.style.margin = '0 auto';
                 tempDiv.style.boxSizing = 'border-box';
                 tempDiv.style.overflow = 'hidden';
                 
+
                 if (docType === 'Admission') {
                     // For admission letters, get only the first page and apply single-page class
                     const firstPage = element.querySelector('.page.A4:first-child');
@@ -3003,11 +3020,11 @@
                     tempDiv.style.position = 'fixed';
                     tempDiv.style.top = '0';
                     tempDiv.style.left = '0';
-                    tempDiv.style.width = '21cm';
-                    tempDiv.style.height = '29.7cm';
+                    tempDiv.style.width = '210mm';
+                    tempDiv.style.height = '297mm';
                     tempDiv.style.backgroundColor = '#ffffff';
                     tempDiv.style.zIndex = '9999';
-                    tempDiv.style.padding = '1cm';
+                    tempDiv.style.padding = '10mm';
                     tempDiv.style.margin = '0 auto';
                     tempDiv.style.boxSizing = 'border-box';
                     tempDiv.style.overflow = 'hidden';
