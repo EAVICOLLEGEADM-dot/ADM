@@ -1052,16 +1052,31 @@
 
         /* Mobile A4 page adjustments */
         @media (max-width: 768px) {
+            .preview-container {
+                padding: 1rem;
+                min-height: 50vh;
+            }
+            
+            #viewGenerate .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            /* Mobile A4 page adjustments */
             .page {
-                padding: 1cm;
+                padding: 10mm;
                 font-size: 14px;
                 margin-bottom: 0.25cm;
                 box-shadow: 0 0 0.25cm rgba(0,0,0,0.3);
+                width: 210mm;
+                height: 297mm;
+                max-width: 210mm;
+                min-height: 297mm;
             }
             
             .page.A4 {
                 width: calc(100vw - 2rem);
-                max-width: 21cm;
+                max-width: 210mm;
+                min-height: 297mm;
             }
             
             .page-header-img {
@@ -1085,23 +1100,39 @@
                 top: -0.4cm;
             }
         }
-        
+
         @media (max-width: 480px) {
             .page {
-                padding: 0.75cm;
+                padding: 8mm;
                 font-size: 13px;
+                width: 210mm;
+                height: 297mm;
+                max-width: 210mm;
+                min-height: 297mm;
+            }
+            
+            .page.A4 {
+                width: calc(100vw - 1.5rem);
+                max-width: 210mm;
+                min-height: 297mm;
             }
             
             .page-header-img {
+                width: 100%;
+                max-width: 12cm;
                 height: 2.5cm;
+                margin: -0.8cm auto 0.4cm;
             }
             
             .letter-header {
-                font-size: 0.9em;
+                flex-direction: column;
+                gap: 0.2cm;
+                margin-bottom: 0.6cm;
+                font-size: 0.95em;
             }
             
             .stamp-container {
-                right: 0.25cm;
+                right: 0.3cm;
                 width: 150px;
                 height: 120px;
                 top: -0.3cm;
@@ -2571,14 +2602,16 @@
             tempDiv.style.position = 'fixed';
             tempDiv.style.top = '0';
             tempDiv.style.left = '0';
-            tempDiv.style.width = '21cm';
-            tempDiv.style.height = '29.7cm';
+            tempDiv.style.width = '210mm';
+            tempDiv.style.height = '297mm';
             tempDiv.style.backgroundColor = '#ffffff';
             tempDiv.style.zIndex = '9999';
-            tempDiv.style.padding = '1cm';
+            tempDiv.style.padding = '10mm';
             tempDiv.style.margin = '0 auto';
             tempDiv.style.boxSizing = 'border-box';
             tempDiv.style.overflow = 'hidden';
+            tempDiv.style.maxWidth = '210mm';
+            tempDiv.style.maxHeight = '297mm';
             
             if (docType === 'Admission') {
                 // For admission letters, get only the first page and apply single-page class
@@ -2586,6 +2619,11 @@
                 if (firstPage) {
                     const clonedPage = firstPage.cloneNode(true);
                     clonedPage.classList.add('single-page');
+                    // Ensure mobile styles are reset for PDF generation
+                    clonedPage.style.width = '190mm';
+                    clonedPage.style.minHeight = '277mm';
+                    clonedPage.style.maxHeight = '277mm';
+                    clonedPage.style.overflow = 'hidden';
                     tempDiv.appendChild(clonedPage);
                 }
             } else {
@@ -2594,6 +2632,11 @@
                 if (bursaryPage) {
                     const clonedPage = bursaryPage.cloneNode(true);
                     clonedPage.classList.add('single-page');
+                    // Ensure mobile styles are reset for PDF generation
+                    clonedPage.style.width = '190mm';
+                    clonedPage.style.minHeight = '277mm';
+                    clonedPage.style.maxHeight = '277mm';
+                    clonedPage.style.overflow = 'hidden';
                     tempDiv.appendChild(clonedPage);
                 }
             }
@@ -2617,7 +2660,12 @@
                     scale: 2, 
                     useCORS: true,
                     allowTaint: true,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    width: 794, // A4 width in pixels at 96 DPI
+                    height: 1123, // A4 height in pixels at 96 DPI
+                    windowWidth: 794,
+                    windowHeight: 1123
                 }).then(canvas => {
                     const imgData = canvas.toDataURL('image/png');
                     
@@ -2704,7 +2752,8 @@
                 tempDiv.style.margin = '0 auto';
                 tempDiv.style.boxSizing = 'border-box';
                 tempDiv.style.overflow = 'hidden';
-                
+                tempDiv.style.maxWidth = '210mm';
+                tempDiv.style.maxHeight = '297mm';
 
                 if (docType === 'Admission') {
                     // For admission letters, get only the first page and apply single-page class
@@ -2712,6 +2761,11 @@
                     if (firstPage) {
                         const clonedPage = firstPage.cloneNode(true);
                         clonedPage.classList.add('single-page');
+                        // Ensure mobile styles are reset for PDF generation
+                        clonedPage.style.width = '190mm';
+                        clonedPage.style.minHeight = '277mm';
+                        clonedPage.style.maxHeight = '277mm';
+                        clonedPage.style.overflow = 'hidden';
                         tempDiv.appendChild(clonedPage);
                     }
                 } else {
@@ -2720,6 +2774,11 @@
                     if (bursaryPage) {
                         const clonedPage = bursaryPage.cloneNode(true);
                         clonedPage.classList.add('single-page');
+                        // Ensure mobile styles are reset for PDF generation
+                        clonedPage.style.width = '190mm';
+                        clonedPage.style.minHeight = '277mm';
+                        clonedPage.style.maxHeight = '277mm';
+                        clonedPage.style.overflow = 'hidden';
                         tempDiv.appendChild(clonedPage);
                     }
                 }
@@ -2743,7 +2802,12 @@
                     scale: 2, 
                     useCORS: true,
                     allowTaint: true,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    width: 794, // A4 width in pixels at 96 DPI
+                    height: 1123, // A4 height in pixels at 96 DPI
+                    windowWidth: 794,
+                    windowHeight: 1123
                 });
                 
                 const imgData = canvas.toDataURL('image/png');
@@ -2828,6 +2892,14 @@
                 }
                 // Clean up temporary element if it exists
                 const tempElements = document.querySelectorAll('div[style*="9999"]');
+                tempElements.forEach(el => {
+                    if (el.parentNode) {
+                        el.parentNode.removeChild(el);
+                    }
+                });
+            }
+        }
+
                 tempElements.forEach(el => {
                     if (el.parentNode) {
                         el.parentNode.removeChild(el);
@@ -3028,6 +3100,8 @@
                     tempDiv.style.margin = '0 auto';
                     tempDiv.style.boxSizing = 'border-box';
                     tempDiv.style.overflow = 'hidden';
+                    tempDiv.style.maxWidth = '210mm';
+                    tempDiv.style.maxHeight = '297mm';
                     
                     // Clone content
                     const pageSelector = docType === 'admission' ? '.page.A4:first-child' : '.page.A4';
@@ -3035,6 +3109,11 @@
                     if (targetPage) {
                         const clonedPage = targetPage.cloneNode(true);
                         clonedPage.classList.add('single-page');
+                        // Ensure mobile styles are reset for PDF generation
+                        clonedPage.style.width = '190mm';
+                        clonedPage.style.minHeight = '277mm';
+                        clonedPage.style.maxHeight = '277mm';
+                        clonedPage.style.overflow = 'hidden';
                         tempDiv.appendChild(clonedPage);
                     }
                     
@@ -3053,7 +3132,12 @@
                         scale: 2,
                         useCORS: true,
                         allowTaint: true,
-                        backgroundColor: '#ffffff'
+                        backgroundColor: '#ffffff',
+                        logging: false,
+                        width: 794, // A4 width in pixels at 96 DPI
+                        height: 1123, // A4 height in pixels at 96 DPI
+                        windowWidth: 794,
+                        windowHeight: 1123
                     });
                     
                     // Create PDF
