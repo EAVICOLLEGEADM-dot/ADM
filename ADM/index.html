@@ -1451,13 +1451,15 @@
             <div class="input-group">
                 <label for="adminType">Select Campus</label>
                 <select id="adminType" required>
-                    <option value="">Choose Campus...</option>
+                    <option value="" disabled selected>Choose Campus...</option>
                     <option value="west">West Campus Admin</option>
                     <option value="town">Town Campus Admin</option>
                 </select>
             </div>
             <button id="loginBtn">Login</button>
             <p id="loginError"></p>
+        </div>
+    </div>
         </div>
     </div>
 
@@ -1516,7 +1518,7 @@
                         <input type="date" id="inpReportDate" required>
                     </div>
                     
-                    <h3 style="margin-top: 2rem; color: var(--secondary-color); border-bottom: 2px solid var(--medium-gray); padding-bottom: 0.5rem;">📋 Bursary Information</h3>
+                    <h3 style="margin-top: 2rem; color: var(--secondary-color); border-bottom: 2px solid var(--medium-gray); padding-bottom: 0.5rem;">Bursary Information</h3>
                     <div class="grid-2">
                         <div class="form-group">
                             <label for="inpFeeBalance">Fee Balance (KES)</label>
@@ -1528,7 +1530,7 @@
                         </div>
                     </div>
 
-                    <h3 style="margin-top: 2rem; color: var(--secondary-color); border-bottom: 2px solid var(--medium-gray); padding-bottom: 0.5rem;">🎨 Document Settings</h3>
+                    <h3 style="margin-top: 2rem; color: var(--secondary-color); border-bottom: 2px solid var(--medium-gray); padding-bottom: 0.5rem;">Document Settings</h3>
                     <div class="grid-2">
                         <div class="form-group">
                             <label for="templateSelect">Template Style</label>
@@ -1542,16 +1544,16 @@
                         <div class="form-group">
                             <label>Permanent Assets</label>
                             <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
-                                <p style="color: var(--success-color); font-size: 0.9rem; margin: 0;">✓ Header: image.png loaded</p>
-                                <p style="color: var(--success-color); font-size: 0.9rem; margin: 0;">✓ Stamp: stamp.png loaded</p>
+                                <p style="color: var(--success-color); font-size: 0.9rem; margin: 0;">Header: image.png loaded</p>
+                                <p style="color: var(--success-color); font-size: 0.9rem; margin: 0;">Stamp: stamp.png loaded</p>
                             </div>
                         </div>
                     </div>
 
                     <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--medium-gray);">
                         <div class="btn-group">
-                            <button id="btnGenerate" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">📄 Generate Letters & Save Record</button>
-                            <button id="btnResetForm" class="btn btn-secondary">🔄 Reset Form</button>
+                            <button id="btnGenerate" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">Generate Letters & Save Record</button>
+                            <button id="btnResetForm" class="btn btn-secondary">Reset Form</button>
                         </div>
                         <p style="margin-top: 1rem; color: var(--text-light); font-size: 0.9rem;">Clicking 'Generate' will create both admission and bursary letters, save the student record, and take you to the view page.</p>
                     </div>
@@ -1562,10 +1564,9 @@
             <div id="viewReports" class="view-content hidden">
                 <div class="card">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                        <h2 class="card-header" style="margin-bottom: 0;">📋 Generated Letters - <span id="studentNameDisplay">Student Name</span></h2>
-                        <button id="btnBackToGenerate" class="btn btn-secondary">← Back to Generate</button>
+                        <h2 class="card-header" style="margin-bottom: 0;">Generated Letters - <span id="studentNameDisplay">Student Name</span></h2>
+                        <button id="btnBackToGenerate" class="btn btn-secondary">Back to Generate</button>
                     </div>
-                    
                     <div class="indicator">
                         <strong>Student:</strong> <span id="studentDetailsDisplay">Student details will appear here</span>
                     </div>
@@ -1574,30 +1575,30 @@
                         <!-- Admission Letter Section -->
                         <div class="card" style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);">
                             <h3 style="color: var(--primary-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                🎓 <span>Admission Letter</span>
+                                <span>Admission Letter</span>
                             </h3>
                             <div id="admissionPreviewContainer" style="max-height: 400px; overflow-y: auto; border: 2px solid var(--medium-gray); border-radius: var(--border-radius); background: white;">
                                 <div id="previewAdmission"><!-- Admission letter preview will be rendered here --></div>
                             </div>
                             <div id="admissionActions" class="btn-group hidden" style="margin-top: 1rem;">
-                                <button id="btnPrintAdmission" class="btn btn-sm btn-secondary">🖨️ Print</button>
-                                <button id="btnPdfAdmission" class="btn btn-sm btn-success">📄 Download PDF</button>
-                                <button id="btnShareWhatsappAdmission" class="btn btn-sm btn-primary">📱 Share All Documents</button>
+                                <button id="btnPrintAdmission" class="btn btn-sm btn-secondary">Print</button>
+                                <button id="btnPdfAdmission" class="btn btn-sm btn-success">Download PDF</button>
+                                <button id="btnShareWhatsappAdmission" class="btn btn-sm btn-primary">Share All Documents</button>
                             </div>
                         </div>
 
                         <!-- Bursary Letter Section -->
                         <div class="card" style="background: linear-gradient(135deg, #fff3e0 0%, #f1f8e9 100%);">
                             <h3 style="color: var(--accent-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                💰 <span>Bursary Letter</span>
+                                <span>Bursary Letter</span>
                             </h3>
                             <div id="bursaryPreviewContainer" style="max-height: 400px; overflow-y: auto; border: 2px solid var(--medium-gray); border-radius: var(--border-radius); background: white;">
                                 <div id="previewBursary"><!-- Bursary letter preview will be rendered here --></div>
                             </div>
                             <div id="bursaryActions" class="btn-group hidden" style="margin-top: 1rem;">
-                                <button id="btnPrintBursary" class="btn btn-sm btn-secondary">🖨️ Print</button>
-                                <button id="btnPdfBursary" class="btn btn-sm btn-success">📄 Download PDF</button>
-                                <button id="btnShareWhatsappBursary" class="btn btn-sm btn-primary">📱 Share All Documents</button>
+                                <button id="btnPrintBursary" class="btn btn-sm btn-secondary">Print</button>
+                                <button id="btnPdfBursary" class="btn btn-sm btn-success">Download PDF</button>
+                                <button id="btnShareWhatsappBursary" class="btn btn-sm btn-primary">Share All Documents</button>
                             </div>
                         </div>
                     </div>
@@ -1605,11 +1606,11 @@
                     <!-- Fee Structure Section -->
                     <div class="card" id="feeStructureSection" style="margin-top: 2rem; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display: none;">
                         <h3 style="color: var(--dark-gray); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                            💳 <span>Fee Structure</span>
+                            <span>Fee Structure</span>
                         </h3>
                         <div style="display: flex; align-items: center; justify-content: space-between;">
                             <p id="feeStructureInfo">Fee structure information will appear here</p>
-                            <button id="btnDownloadFeeStructure" class="btn btn-sm btn-success">📄 Download Fee Structure</button>
+                            <button id="btnDownloadFeeStructure" class="btn btn-sm btn-success">Download Fee Structure</button>
                         </div>
                     </div>
                 </div>
@@ -1681,7 +1682,7 @@
                     <p style="margin-bottom: 2rem; color: var(--dark-gray);"><strong>Fee Structure Rule:</strong> All fee structure files are loaded directly from the <code>fees/</code> folder in your project. To add a course, select the corresponding fee structure PDF from the dropdown. Files must be placed in the fees/ directory for them to appear in the selection.</p>
                     
                     <div class="card" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); margin-bottom: 2rem; border-left: 4px solid var(--success-color);">
-                        <h3 style="color: var(--success-color); margin-bottom: 1rem;">📁 Fee Structure Files Location</h3>
+                        <h3 style="color: var(--success-color); margin-bottom: 1rem;">Fee Structure Files Location</h3>
                         <p style="margin-bottom: 1rem;"><strong>Files are loaded from:</strong> <code>fees/</code> folder</p>
                         <p style="margin-bottom: 1rem;"><strong>Current files available:</strong> 11 PDF files detected</p>
                         <p><strong>Note:</strong> Fee structure files are never stored in the database - they are always loaded directly from the fees/ folder to ensure data integrity and easy file management.</p>
@@ -1689,7 +1690,7 @@
                     
                     <!-- Course Addition Helper -->
                     <div class="card" style="background: linear-gradient(135deg, var(--light-gray) 0%, #f1f5f9 100%); margin-bottom: 2rem; border-left: 4px solid var(--primary-color);">
-                        <h3 style="color: var(--primary-color); margin-bottom: 1rem;">📚 Add New Course Collection</h3>
+                        <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Add New Course Collection</h3>
                         <p style="margin-bottom: 1rem;">Click the button below to add all the latest courses to your system. This will only add courses that don't already exist.</p>
                         <button id="addNewCoursesBtn" class="btn btn-primary">Add All New Courses (70+ courses)</button>
                     </div>
@@ -2912,14 +2913,6 @@
             }
         }
 
-                tempElements.forEach(el => {
-                    if (el.parentNode) {
-                        el.parentNode.removeChild(el);
-                    }
-                });
-            }
-        }
-
         // PDF cache for synchronous sharing
         const pdfCache = {
             admission: null,
@@ -3639,8 +3632,8 @@
             }
             courses.forEach(c => {
                 const feeStructureStatus = c.feeStructurePdf ? 
-                    '<span style="color: green;">✓ Uploaded</span>' : 
-                    '<span style="color: red;">✗ Not uploaded</span>';
+                    '<span style="color: green;">Uploaded</span>' :
+                    '<span style="color: red;">Not uploaded</span>';
                 tbody.innerHTML += `
                     <tr>
                         <td>${c.name}</td>
