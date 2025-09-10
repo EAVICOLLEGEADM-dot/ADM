@@ -832,13 +832,13 @@
             display: block;
             margin: 0 auto;
             margin-bottom: 1rem;
-            padding: 10mm;
+            padding: 25mm; /* 1 inch margins on all sides */
             color: #000;
-            font-size: 16px;
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            width: 210mm;
-            height: 297mm;
+            font-size: 12pt; /* Professional font size */
+            font-family: 'Times New Roman', Times, serif; /* Professional font */
+            line-height: 1.5; /* Proper line spacing */
+            width: 210mm; /* A4 width */
+            height: 297mm; /* A4 height */
             box-sizing: border-box;
             overflow: hidden;
             page-break-after: always;
@@ -854,54 +854,55 @@
             display: block;
             max-width: 100%;
             height: auto;
-            margin: 0 auto 1.5rem;
-            max-height: 4cm;
+            margin: 0 auto 15mm;
+            max-height: 3cm;
         }
 
         .letter-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 1.5rem;
+            margin-bottom: 15mm;
             font-weight: bold;
             color: #000;
-            font-size: 1rem;
+            font-size: 12pt;
             flex-wrap: wrap;
         }
 
         .letter-body {
             color: #000;
-            font-size: 1rem;
-            line-height: 1.6;
+            font-size: 12pt;
+            line-height: 1.5;
+            font-family: 'Times New Roman', Times, serif;
         }
 
         .letter-body h3 {
             color: #000;
             text-decoration: underline;
-            margin: 1.5rem 0 1rem 0;
-            font-size: 1.2rem;
+            margin: 10mm 0 5mm 0; /* Reduced spacing */
+            font-size: 14pt;
             font-weight: bold;
             text-align: center;
         }
 
         .letter-body h4 {
             color: #000;
-            margin: 1.5rem 0 1rem 0;
-            font-size: 1.1rem;
+            margin: 8mm 0 5mm 0; /* Reduced spacing */
+            font-size: 13pt;
             font-weight: bold;
         }
 
         .letter-body p {
-            margin-bottom: 1rem;
+            margin-bottom: 5mm; /* Reduced spacing */
             text-align: left;
         }
 
         .letter-body ul {
-            margin: 1rem 0;
-            padding-left: 2rem;
+            margin: 5mm 0; /* Reduced spacing */
+            padding-left: 15mm;
         }
 
         .letter-body li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 3mm; /* Reduced spacing */
         }
 
         .student-name,
@@ -914,48 +915,72 @@
 
         .payment-details {
             background: #f8f9fa;
-            padding: 1rem;
-            margin: 1rem 0;
+            padding: 5mm;
+            margin: 5mm 0;
             border: 1px solid #ddd;
         }
 
         .important-note {
             background: #fff3cd;
-            padding: 1rem;
-            margin: 1rem 0;
+            padding: 5mm;
+            margin: 5mm 0;
             border: 1px solid #ffeaa7;
         }
 
         .congratulations {
             background: #d4edda;
-            padding: 1rem;
-            margin: 1rem 0;
+            padding: 5mm;
+            margin: 5mm 0;
             border: 1px solid #c3e6cb;
         }
 
         .details-block {
-            margin: 1.5rem 0;
+            margin: 8mm 0; /* Reduced spacing */
         }
 
         .letter-footer {
-            margin-top: 2rem;
+            margin-top: 15mm; /* Reduced spacing */
             position: relative;
         }
 
         .signature-section {
-            margin: 1rem 0;
+            margin: 5mm 0; /* Reduced spacing */
         }
 
         .signature-spacing {
-            margin-top: 2rem;
+            margin-top: 10mm; /* Reduced spacing */
+        }
+
+        /* Form styling for fillable fields */
+        .form-field {
+            display: block;
+            margin: 3mm 0;
+        }
+
+        .form-label {
+            display: inline-block;
+            width: 30mm;
+            font-weight: bold;
+            vertical-align: top;
+        }
+
+        .form-value {
+            display: inline-block;
+            border-bottom: 1px solid #000;
+            width: calc(100% - 35mm);
+            min-height: 6mm;
+        }
+
+        .form-row {
+            margin: 2mm 0;
         }
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .page {
-                padding: 1rem;
-                margin-bottom: 0.5rem;
-                font-size: 14px;
+                padding: 25mm; /* Maintain 1 inch margins */
+                margin-bottom: 5mm;
+                font-size: 11pt; /* Slightly smaller font for mobile */
                 width: 210mm;
                 height: 297mm;
                 max-width: 210mm;
@@ -966,28 +991,28 @@
             .letter-header {
                 flex-direction: column;
                 text-align: center;
-                gap: 0.5rem;
+                gap: 3mm;
             }
             
             .letter-body h3 {
-                font-size: 1.1rem;
+                font-size: 13pt;
             }
             
             .letter-body h4 {
-                font-size: 1rem;
+                font-size: 12pt;
             }
             
             .payment-details,
             .important-note,
             .congratulations {
-                padding: 0.75rem;
+                padding: 4mm;
             }
         }
 
         @media (max-width: 480px) {
             .page {
-                padding: 0.75rem;
-                font-size: 13px;
+                padding: 20mm; /* Slightly reduced margins for small screens */
+                font-size: 10pt;
                 width: 210mm;
                 height: 297mm;
                 max-width: 210mm;
@@ -996,22 +1021,22 @@
             }
             
             .letter-body h3 {
-                font-size: 1rem;
+                font-size: 12pt;
             }
             
             .letter-body h4 {
-                font-size: 0.95rem;
+                font-size: 11pt;
             }
             
             .payment-details,
             .important-note,
             .congratulations {
-                padding: 0.5rem;
+                padding: 3mm;
             }
         }
 
         .single-page .letter-body .details-block {
-            margin: 0.4cm 0;
+            margin: 3mm 0;
         }
 
         .letter-body .details-block span {
@@ -1019,12 +1044,12 @@
         }
 
         .letter-footer {
-            margin-top: 2cm;
+            margin-top: 15mm;
             position: relative;
         }
 
         .single-page .letter-footer {
-            margin-top: 0.4cm;
+            margin-top: 8mm;
         }
 
         .letter-footer .signature-section {
@@ -1033,17 +1058,17 @@
         }
 
         .signature-spacing {
-            margin-top: 0.8cm;
+            margin-top: 8mm;
         }
 
         .single-page .signature-spacing {
-            margin-top: 0.4cm;
+            margin-top: 5mm;
         }
 
         .stamp-container {
             position: absolute;
-            top: -0.5cm;
-            right: 2cm;
+            top: -5mm;
+            right: 15mm;
             width: 220px;
             height: 180px;
         }
@@ -1051,8 +1076,8 @@
         .single-page .stamp-container {
             width: 150px;
             height: 120px;
-            right: 0.8cm;
-            top: -0.3cm;
+            right: 10mm;
+            top: -3mm;
         }
 
         .stamp-img {
@@ -1069,7 +1094,7 @@
         /* Mobile A4 page adjustments */
         @media (max-width: 768px) {
             .preview-container {
-                padding: 1rem;
+                padding: 10mm;
                 min-height: 50vh;
             }
             
@@ -1079,9 +1104,9 @@
 
             /* Mobile A4 page adjustments */
             .page {
-                padding: 10mm;
-                font-size: 14px;
-                margin-bottom: 0.25cm;
+                padding: 25mm;
+                font-size: 11pt;
+                margin-bottom: 3mm;
                 box-shadow: 0 0 0.25cm rgba(0,0,0,0.3);
                 width: 210mm;
                 height: 297mm;
@@ -1091,7 +1116,7 @@
             }
             
             .page.A4 {
-                width: calc(100vw - 2rem);
+                width: calc(100vw - 20mm);
                 max-width: 210mm;
                 min-height: 297mm;
                 max-height: 297mm;
@@ -1101,28 +1126,28 @@
                 width: 100%;
                 max-width: 15cm;
                 height: 3cm;
-                margin: -1cm auto 0.5cm;
+                margin: -8mm auto 5mm;
             }
             
             .letter-header {
                 flex-direction: column;
-                gap: 0.25cm;
-                margin-bottom: 0.75cm;
-                font-size: 1.0em;
+                gap: 3mm;
+                margin-bottom: 8mm;
+                font-size: 11pt;
             }
             
             .stamp-container {
-                right: 0.5cm;
+                right: 8mm;
                 width: 170px;
                 height: 140px;
-                top: -0.4cm;
+                top: -4mm;
             }
         }
 
         @media (max-width: 480px) {
             .page {
-                padding: 8mm;
-                font-size: 13px;
+                padding: 20mm;
+                font-size: 10pt;
                 width: 210mm;
                 height: 297mm;
                 max-width: 210mm;
@@ -1131,7 +1156,7 @@
             }
             
             .page.A4 {
-                width: calc(100vw - 1.5rem);
+                width: calc(100vw - 15mm);
                 max-width: 210mm;
                 min-height: 297mm;
                 max-height: 297mm;
@@ -1141,21 +1166,21 @@
                 width: 100%;
                 max-width: 12cm;
                 height: 2.5cm;
-                margin: -0.8cm auto 0.4cm;
+                margin: -6mm auto 4mm;
             }
             
             .letter-header {
                 flex-direction: column;
-                gap: 0.2cm;
-                margin-bottom: 0.6cm;
-                font-size: 0.95em;
+                gap: 2mm;
+                margin-bottom: 6mm;
+                font-size: 10pt;
             }
             
             .stamp-container {
-                right: 0.3cm;
+                right: 5mm;
                 width: 150px;
                 height: 120px;
-                top: -0.3cm;
+                top: -3mm;
             }
         }
 
@@ -1236,13 +1261,15 @@
         @media print {
             @page {
                 size: A4;
-                margin: 0;
+                margin: 25mm; /* 1 inch margins */
             }
             
             body, html {
                 background: #fff;
                 -webkit-print-color-adjust: exact;
                 color-adjust: exact;
+                font-family: 'Times New Roman', Times, serif;
+                font-size: 12pt;
             }
             
             .no-print, .navbar, #viewGenerate > .grid-2 > div:first-child, .preview-container {
@@ -1258,83 +1285,88 @@
                 margin: 0;
                 box-shadow: none;
                 border: none;
-                width: 21cm;
-                height: 29.7cm;
-                max-height: 29.7cm;
+                width: 210mm;
+                height: 297mm;
+                max-height: 297mm;
                 page-break-after: always;
                 page-break-inside: avoid;
                 overflow: hidden;
+                padding: 25mm;
+                font-family: 'Times New Roman', Times, serif;
+                font-size: 12pt;
+                line-height: 1.5;
             }
             
             .page.single-page {
-                width: 21cm !important;
-                height: 29.7cm !important;
-                max-height: 29.7cm !important;
-                padding: 0.5cm 1cm !important;
-                font-size: 12px !important;
-                line-height: 1.3 !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                max-height: 297mm !important;
+                padding: 25mm !important;
+                font-size: 12pt !important;
+                line-height: 1.5 !important;
                 overflow: hidden !important;
                 page-break-after: always !important;
                 page-break-inside: avoid !important;
                 transform: scale(1) !important;
                 transform-origin: top left !important;
+                font-family: 'Times New Roman', Times, serif !important;
             }
             
             .single-page .page-header-img {
                 height: 2cm !important;
-                margin: 0 auto 0.1cm !important;
-                max-width: 19cm !important;
+                margin: 0 auto 5mm !important;
+                max-width: 160mm !important;
             }
             
             .single-page .letter-header {
-                margin-bottom: 0.2cm !important;
-                font-size: 0.9em !important;
+                margin-bottom: 8mm !important;
+                font-size: 12pt !important;
             }
             
             .single-page .letter-body {
-                line-height: 1.2 !important;
-                font-size: 1.0em !important;
+                line-height: 1.5 !important;
+                font-size: 12pt !important;
+                font-family: 'Times New Roman', Times, serif !important;
             }
             
             .single-page .letter-body h3 {
-                margin-bottom: 0.2cm !important;
-                font-size: 1.1rem !important;
+                margin: 8mm 0 5mm 0 !important;
+                font-size: 14pt !important;
             }
             
             .single-page .letter-body h4 {
-                margin-top: 0.3cm !important;
-                margin-bottom: 0.2cm !important;
-                font-size: 1.0rem !important;
+                margin: 6mm 0 4mm 0 !important;
+                font-size: 13pt !important;
             }
             
             .single-page .letter-body p {
-                margin-bottom: 0.15cm !important;
+                margin-bottom: 4mm !important;
             }
             
             .single-page .letter-body .payment-details,
             .single-page .letter-body .important-note,
             .single-page .letter-body .congratulations {
-                padding: 0.2cm !important;
-                margin: 0.2cm 0 !important;
+                padding: 4mm !important;
+                margin: 4mm 0 !important;
             }
             
             .single-page .letter-body .details-block {
-                margin: 0.25cm 0 !important;
+                margin: 5mm 0 !important;
             }
             
             .single-page .letter-footer {
-                margin-top: 0.3cm !important;
+                margin-top: 10mm !important;
             }
             
             .single-page .signature-spacing {
-                margin-top: 0.25cm !important;
+                margin-top: 6mm !important;
             }
             
             .single-page .stamp-container {
                 width: 120px !important;
                 height: 100px !important;
-                right: 0.5cm !important;
-                top: -0.2cm !important;
+                right: 10mm !important;
+                top: -3mm !important;
             }
             
             .print-only {
@@ -1373,6 +1405,21 @@
             .payment-details {
                 -webkit-print-color-adjust: exact !important;
                 color-adjust: exact !important;
+            }
+            
+            /* Form styling for print */
+            .form-field {
+                margin: 3mm 0 !important;
+            }
+            
+            .form-label {
+                width: 30mm !important;
+            }
+            
+            .form-value {
+                width: calc(100% - 35mm) !important;
+                border-bottom: 1px solid #000 !important;
+                min-height: 6mm !important;
             }
         }
 
@@ -2335,18 +2382,31 @@
                         <br>
                         <h3>RE: ADMISSION LETTER</h3>
                         <br>
-                        <p>Name: <span class="student-name">${data.name.toUpperCase()}</span></p>
+                        
+                        <div class="details-block">
+                            <div class="form-row">
+                                <span class="form-label">Name:</span>
+                                <span class="form-value student-name">${data.name.toUpperCase()}</span>
+                            </div>
+                            
+                            <div class="form-row">
+                                <span class="form-label">Course:</span>
+                                <span class="form-value course-name">${data.courseName.toUpperCase()}</span>
+                            </div>
+                            
+                            <div class="form-row">
+                                <span class="form-label">Adm. No:</span>
+                                <span class="form-value admission-number">${data.admNo.toUpperCase()}</span>
+                            </div>
+                            
+                            <div class="form-row">
+                                <span class="form-label">Reporting Date:</span>
+                                <span class="form-value reporting-date">${formatDate(new Date(data.reportDate))}</span>
+                            </div>
+                        </div>
                         
                         <div class="congratulations">
                             <p><strong>Congratulations!</strong> We are pleased to inform you that, with the approval of the Board of Directors, you have been admitted as a student of <strong>East Africa Vision Institute (EAVI)</strong>.</p>
-                        </div>
-                        
-                        <p>You have been admitted for <span class="course-name">${data.courseName.toUpperCase()}</span>, with Admission Number: <span class="admission-number">${data.admNo.toUpperCase()}</span>.</p>
-                        
-                        <p>You are required to report to the Institute on <span class="reporting-date">${formatDate(new Date(data.reportDate))}</span>.</p>
-                        
-                        <div class="important-note">
-                            <p><strong>Note:</strong> You are required to report immediately.</p>
                         </div>
                         
                         <h4>Fee Payment Details</h4>
@@ -2395,16 +2455,35 @@
                         <h3>RE: BURSARY SUPPORT REQUEST</h3>
                         
                         <div class="details-block">
-                            <p>Name: <span class="student-name">${data.name.toUpperCase()}</span><br>
-                            The above named student, Adm. No: <span class="admission-number">${data.admNo.toUpperCase()}</span><br>                        
-                            Enrolled for <span class="course-name">${data.courseName.toUpperCase()}</span></p>
+                            <div class="form-row">
+                                <span class="form-label">Name:</span>
+                                <span class="form-value student-name">${data.name.toUpperCase()}</span>
+                            </div>
+                            
+                            <div class="form-row">
+                                <span class="form-label">Adm. No:</span>
+                                <span class="form-value admission-number">${data.admNo.toUpperCase()}</span>
+                            </div>
+                            
+                            <div class="form-row">
+                                <span class="form-label">Course:</span>
+                                <span class="form-value course-name">${data.courseName.toUpperCase()}</span>
+                            </div>
+                            
+                            <div class="form-row">
+                                <span class="form-label">Fee Balance:</span>
+                                <span class="form-value fee-amount">KES ${data.feeBalance.toLocaleString()}</span>
+                            </div>
+                            
+                            <div class="form-row">
+                                <span class="form-label">Total per Term:</span>
+                                <span class="form-value fee-amount">KES ${data.totalPerTerm.toLocaleString()}</span>
+                            </div>
                         </div>
                         
                         <div class="important-note">
                             <p>Due to financial difficulty, the student is not able to continue/start the course immediately; therefore we request that you give this student school fee support.</p>
                         </div>
-                        
-                        <p>The student has a fee balance of <span class="fee-amount">KES ${data.feeBalance.toLocaleString()}</span>. The total fees per term is <span class="fee-amount">KES ${data.totalPerTerm.toLocaleString()}</span>.</p>
                         
                         <h4>Fee Payment Details</h4>
                         <div class="payment-details">
