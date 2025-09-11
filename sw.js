@@ -1,7 +1,7 @@
 const CACHE_NAME = 'eavi-system-cache-v2'; // Increment this version for any update
 const urlsToCache = [
     './', // This caches the root URL, which is your start_url
-    './EAVIADM.html',
+    './ADM/index.html',
     './manifest.json',
     './logo.png',
     './images/icon-192x192.png',
