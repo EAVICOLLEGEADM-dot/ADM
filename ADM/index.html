@@ -1317,6 +1317,41 @@
             }
         }
 
+        /* --- PDF RENDER MODE --- */
+        /* 
+          This class is added to the temporary container used for PDF generation.
+          It forces the document into a consistent, desktop-like A4 layout,
+          overriding any responsive styles that would otherwise apply on mobile.
+          This ensures that PDFs generated on mobile are identical to those from a desktop.
+        */
+        .pdf-render-mode .page.A4 {
+            width: 21cm !important;
+            height: 29.7cm !important;
+            max-width: 21cm !important;
+            padding: 2rem !important;
+            font-size: 16px !important;
+            box-shadow: none !important;
+            margin: 0 auto !important;
+        }
+
+        .pdf-render-mode .page-header-img {
+            max-width: 100% !important;
+            height: auto !important;
+            margin: 0 auto 1.5rem !important;
+        }
+
+        .pdf-render-mode .letter-header {
+            flex-direction: row !important;
+            font-size: 1rem !important;
+        }
+
+        .pdf-render-mode .stamp-container {
+            width: 220px !important;
+            height: 180px !important;
+            right: 2cm !important;
+            top: -0.5cm !important;
+        }
+
         #print-area {
             display: none;
         }
@@ -1643,7 +1678,7 @@
                                 
                                 <div class="form-group">
                                     <label for="westPrefix">Admission Number Prefix</label>
-                                    <input type="text" id="westPrefix" placeholder="E.g., EAVI-W" value="EAVI-W">
+                                    <input type="text" id="westPrefix" placeholder="E.g., EAVI" value="EAVI">
                                     <small style="color: var(--dark-gray);">The prefix for West Campus admission numbers</small>
                                 </div>
                                 
@@ -1680,7 +1715,7 @@
                                 
                                 <div style="padding: 0.5rem; background: var(--light-gray); border-radius: var(--border-radius); margin-top: 0.5rem;">
                                     <p style="margin: 0; font-weight: bold;">Preview:</p>
-                                    <p style="margin: 0.25rem 0 0 0; font-family: monospace;" id="westAdmissionPreview">EAVI-W/2025/0001</p>
+                                    <p style="margin: 0.25rem 0 0 0; font-family: monospace;" id="westAdmissionPreview">EAVI/0001/25</p>
                                 </div>
                             </div>
                             
@@ -1690,7 +1725,7 @@
                                 
                                 <div class="form-group">
                                     <label for="townPrefix">Admission Number Prefix</label>
-                                    <input type="text" id="townPrefix" placeholder="E.g., EAVI-T" value="EAVI-T">
+                                    <input type="text" id="townPrefix" placeholder="E.g., EAVI" value="EAVI">
                                     <small style="color: var(--dark-gray);">The prefix for Town Campus admission numbers</small>
                                 </div>
                                 
@@ -1727,7 +1762,7 @@
                                 
                                 <div style="padding: 0.5rem; background: var(--light-gray); border-radius: var(--border-radius); margin-top: 0.5rem;">
                                     <p style="margin: 0; font-weight: bold;">Preview:</p>
-                                    <p style="margin: 0.25rem 0 0 0; font-family: monospace;" id="townAdmissionPreview">EAVI-T/2025/0001</p>
+                                    <p style="margin: 0.25rem 0 0 0; font-family: monospace;" id="townAdmissionPreview">EAVI/0001/25</p>
                                 </div>
                             </div>
                         </div>
@@ -1945,11 +1980,6 @@
                 };
                 sessionStorage.setItem('eaviAuth', 'true');
                 sessionStorage.setItem('eaviAdmin', JSON.stringify(state.currentAdmin));
-                
-                // Auto-generate admission number for the selected campus
-                setTimeout(() => {
-                    autoGenerateAdmissionNumber();
-                }, 100);
                 
                 showApp();
             } else {
@@ -2310,31 +2340,45 @@
         async function handleGenerate() {
             if (!validateForm()) return;
 
-            try {
-                const refNo = await generateRefNo();
-                const currentDate = formatDate(new Date());
+            try { // Use a single variable for the admission number
+                const admNoInput = generateForm.admNo;
                 const selectedCourseOption = generateForm.course.options[generateForm.course.selectedIndex];
+                const isEditing = !!generateForm.id.value;
+                let admissionNumber;
 
-                const studentData = {
-                    id: generateForm.id.value ? parseInt(generateForm.id.value) : undefined,
+                if (isEditing) {
+                    // For existing students, reuse the saved admission number.
+                    const existingStudent = await getByIdFromDB('students', parseInt(generateForm.id.value));
+                    admissionNumber = existingStudent.admNo;
+                } else {
+                    // For new students, generate a new admission number.
+                    admissionNumber = await generateRefNo(state.currentAdmin ? state.currentAdmin.type : 'unknown');
+                }
+
+                const studentData = { // id is handled below
                     name: generateForm.name.value.trim(),
-                    admNo: generateForm.admNo.value.trim(),
+                    admNo: admissionNumber, // Use the generated/retrieved number
                     courseId: parseInt(generateForm.course.value),
                     courseName: selectedCourseOption.text,
                     courseRequirements: generateForm.requirements.value,
                     reportDate: generateForm.reportDate.value,
                     feeBalance: parseFloat(generateForm.feeBalance.value) || 0,
                     totalPerTerm: parseFloat(generateForm.totalPerTerm.value) || 0,
-                    refNo: refNo,
+                    refNo: admissionNumber, // Also use it for the 'refNo' field
                     createdAt: new Date().toISOString(),
                     year: new Date(generateForm.reportDate.value).getFullYear(),
                     template: generateForm.template.value,
-                    headerImg: state.headerImageDataUrl,
-                    stampImg: state.stampImageDataUrl,
-                    currentDate: currentDate,
+                    headerImg: state.headerImageDataUrl, // These are now part of the student record
+                    stampImg: state.stampImageDataUrl, // and will be used for regeneration
+                    currentDate: formatDate(new Date()),
                     campus: state.currentAdmin ? state.currentAdmin.type : 'unknown',
                     campusName: state.currentAdmin ? state.currentAdmin.displayName : 'Unknown Campus'
                 };
+
+                // Only add the ID if we are editing an existing record
+                if (generateForm.id.value) {
+                    studentData.id = parseInt(generateForm.id.value);
+                }
 
                 // Show loading state
                 generateForm.btnGenerate.disabled = true;
@@ -2373,23 +2417,24 @@
                 generateForm.btnGenerate.disabled = false;
                 generateForm.btnGenerate.textContent = generateForm.id.value ? 'Update Record' : 'Generate & Save';
                 
-                if (error.message && error.message.includes('admNo')) {
-                    showToast('Error: Admission number already exists. Please use a different admission number.', 'error');
-                } else {
-                    showToast(`Error saving student record: ${error.message || 'Unknown error'}`, 'error');
-                }
+                // The error from IndexedDB for a unique constraint is a DOMException.
+                // We can check its name to provide a more specific message.
+                const errorMessage = error.name === 'ConstraintError'
+                    ? 'Admission number already exists. Please use a unique one.'
+                    : `Error saving student record: ${error.message || 'Unknown error'}`;
+                showToast(errorMessage, 'error');
             }
         }
 
         function validateForm() {
             let isValid = true;
             const requiredFields = [generateForm.name, generateForm.admNo, generateForm.course, generateForm.reportDate];
+            // Reset previous validation styles
+            requiredFields.forEach(field => field.style.borderColor = '');
             requiredFields.forEach(field => {
                 if (!field.value) {
                     field.style.borderColor = 'red';
                     isValid = false;
-                } else {
-                    field.style.borderColor = '';
                 }
             });
             if (!isValid) showToast('Please fill all required fields.', 'error');
@@ -2633,14 +2678,6 @@
         }
 
         // --- DATA HELPERS ---
-        async function loadInitialData() {
-            await loadPersistedSettings();
-            await loadCoursesAndDepartments();
-            await loadFeeStructureFiles();
-            await loadStudentList();
-            await updateDashboard();
-        }
-
         // Load admission number settings from database
         async function loadAdmissionSettings() {
             try {
@@ -2733,7 +2770,7 @@
                 const westStartNumber = settings.find(s => s.key === 'westStartNumber');
                 const westNumberFormat = settings.find(s => s.key === 'westNumberFormat');
                 
-                document.getElementById('westPrefix').value = westPrefix ? westPrefix.value : 'EAVI-W';
+                document.getElementById('westPrefix').value = westPrefix ? westPrefix.value : 'EAVI';
                 document.getElementById('westSeparator').value = westSeparator ? westSeparator.value : '/';
                 document.getElementById('westYear').value = westYear ? westYear.value : 'yyyy';
                 document.getElementById('westStartNumber').value = westStartNumber ? westStartNumber.value : '1';
@@ -2746,7 +2783,7 @@
                 const townStartNumber = settings.find(s => s.key === 'townStartNumber');
                 const townNumberFormat = settings.find(s => s.key === 'townNumberFormat');
                 
-                document.getElementById('townPrefix').value = townPrefix ? townPrefix.value : 'EAVI-T';
+                document.getElementById('townPrefix').value = townPrefix ? townPrefix.value : 'EAVI';
                 document.getElementById('townSeparator').value = townSeparator ? townSeparator.value : '/';
                 document.getElementById('townYear').value = townYear ? townYear.value : 'yyyy';
                 document.getElementById('townStartNumber').value = townStartNumber ? townStartNumber.value : '1';
@@ -2762,7 +2799,7 @@
         // Update campus admission number previews
         function updateCampusAdmissionPreviews() {
             // Update West Campus preview
-            const westPrefix = document.getElementById('westPrefix').value || 'EAVI-W';
+            const westPrefix = document.getElementById('westPrefix').value || 'EAVI';
             const westSeparator = document.getElementById('westSeparator').value || '/';
             const westYearFormat = document.getElementById('westYear').value || 'yyyy';
             const westStartNumber = document.getElementById('westStartNumber').value || '1';
@@ -2771,11 +2808,11 @@
             const westYear = westYearFormat === 'yy' ? new Date().getFullYear().toString().slice(-2) : new Date().getFullYear();
             const westDigits = parseInt(westNumberFormat);
             const westFormattedNumber = westStartNumber.toString().padStart(westDigits, '0');
-            const westPreview = `${westPrefix}${westSeparator}${westYear}${westSeparator}${westFormattedNumber}`;
+            const westPreview = `${westPrefix}${westSeparator}${westFormattedNumber}${westSeparator}${westYear}`;
             document.getElementById('westAdmissionPreview').textContent = westPreview;
             
             // Update Town Campus preview
-            const townPrefix = document.getElementById('townPrefix').value || 'EAVI-T';
+            const townPrefix = document.getElementById('townPrefix').value || 'EAVI';
             const townSeparator = document.getElementById('townSeparator').value || '/';
             const townYearFormat = document.getElementById('townYear').value || 'yyyy';
             const townStartNumber = document.getElementById('townStartNumber').value || '1';
@@ -2784,7 +2821,7 @@
             const townYear = townYearFormat === 'yy' ? new Date().getFullYear().toString().slice(-2) : new Date().getFullYear();
             const townDigits = parseInt(townNumberFormat);
             const townFormattedNumber = townStartNumber.toString().padStart(townDigits, '0');
-            const townPreview = `${townPrefix}${townSeparator}${townYear}${townSeparator}${townFormattedNumber}`;
+            const townPreview = `${townPrefix}${townSeparator}${townFormattedNumber}${townSeparator}${townYear}`;
             document.getElementById('townAdmissionPreview').textContent = townPreview;
         }
 
@@ -2792,12 +2829,12 @@
         async function saveCampusAdmissionSettings() {
             try {
                 const settings = [
-                    { key: 'westPrefix', value: document.getElementById('westPrefix').value || 'EAVI-W' },
+                    { key: 'westPrefix', value: document.getElementById('westPrefix').value || 'EAVI' },
                     { key: 'westSeparator', value: document.getElementById('westSeparator').value || '/' },
                     { key: 'westYear', value: document.getElementById('westYear').value || 'yyyy' },
                     { key: 'westStartNumber', value: document.getElementById('westStartNumber').value || '1' },
                     { key: 'westNumberFormat', value: document.getElementById('westNumberFormat').value || '4' },
-                    { key: 'townPrefix', value: document.getElementById('townPrefix').value || 'EAVI-T' },
+                    { key: 'townPrefix', value: document.getElementById('townPrefix').value || 'EAVI' },
                     { key: 'townSeparator', value: document.getElementById('townSeparator').value || '/' },
                     { key: 'townYear', value: document.getElementById('townYear').value || 'yyyy' },
                     { key: 'townStartNumber', value: document.getElementById('townStartNumber').value || '1' },
@@ -2820,14 +2857,14 @@
         // Reset campus admission settings to defaults
         function resetCampusAdmissionSettings() {
             // Reset West Campus settings
-            document.getElementById('westPrefix').value = 'EAVI-W';
+            document.getElementById('westPrefix').value = 'EAVI';
             document.getElementById('westSeparator').value = '/';
             document.getElementById('westYear').value = 'yyyy';
             document.getElementById('westStartNumber').value = '1';
             document.getElementById('westNumberFormat').value = '4';
             
             // Reset Town Campus settings
-            document.getElementById('townPrefix').value = 'EAVI-T';
+            document.getElementById('townPrefix').value = 'EAVI';
             document.getElementById('townSeparator').value = '/';
             document.getElementById('townYear').value = 'yyyy';
             document.getElementById('townStartNumber').value = '1';
@@ -2846,13 +2883,13 @@
                 
                 // Get campus-specific settings
                 if (campusType === 'west') {
-                    prefix = settings.find(s => s.key === 'westPrefix')?.value || 'EAVI-W';
+                    prefix = settings.find(s => s.key === 'westPrefix')?.value || 'EAVI';
                     separator = settings.find(s => s.key === 'westSeparator')?.value || '/';
                     yearFormat = settings.find(s => s.key === 'westYear')?.value || 'yyyy';
                     startNumber = parseInt(settings.find(s => s.key === 'westStartNumber')?.value || '1');
                     numberFormat = parseInt(settings.find(s => s.key === 'westNumberFormat')?.value || '4');
                 } else if (campusType === 'town') {
-                    prefix = settings.find(s => s.key === 'townPrefix')?.value || 'EAVI-T';
+                    prefix = settings.find(s => s.key === 'townPrefix')?.value || 'EAVI';
                     separator = settings.find(s => s.key === 'townSeparator')?.value || '/';
                     yearFormat = settings.find(s => s.key === 'townYear')?.value || 'yyyy';
                     startNumber = parseInt(settings.find(s => s.key === 'townStartNumber')?.value || '1');
@@ -2869,42 +2906,41 @@
                 // Get current year
                 const currentYear = yearFormat === 'yy' ? new Date().getFullYear().toString().slice(-2) : new Date().getFullYear();
                 
-                // Get the last admission number from database for this campus
+                // Get all students from database for this campus
                 const allStudents = await getAllFromDB('students');
                 const campusStudents = allStudents.filter(s => s.campus === campusType);
                 
-                // Sort by creation date to get the most recent
-                campusStudents.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                // Find the highest number currently in use for this campus and year
+                let maxNum = startNumber - 1;
                 
-                let lastNum = startNumber - 1;
-                
-                if (campusStudents.length > 0) {
-                    const lastStudent = campusStudents[0];
-                    const lastRef = lastStudent.refNo;
-                    // Try to extract the number part from the last reference
-                    const parts = lastRef.split(separator);
-                    if (parts.length >= 3) {
-                        const lastNumberPart = parts[2];
-                        const lastNumber = parseInt(lastNumberPart);
-                        if (!isNaN(lastNumber)) {
-                            lastNum = lastNumber;
+                for (const student of campusStudents) {
+                    const ref = student.refNo;
+                    // Check if this reference matches our format
+                    const parts = ref.split(separator);
+                    if (parts.length >= 3 && 
+                        parts[0] === prefix && 
+                        (parts[1] === currentYear.toString() || parts[1] === currentYear.toString().slice(-2))) {
+                        const numberPart = parts[2];
+                        const number = parseInt(numberPart);
+                        if (!isNaN(number) && number > maxNum) {
+                            maxNum = number;
                         }
                     }
                 }
                 
-                // Increment and format the new number
-                const newNum = (lastNum + 1).toString().padStart(numberFormat, '0');
-                return `${prefix}${separator}${currentYear}${separator}${newNum}`;
+                // Increment to get the next number
+                const newNum = (maxNum + 1).toString().padStart(numberFormat, '0');
+                return `${prefix}${separator}${newNum}${separator}${currentYear}`;
             } catch (error) {
                 console.error('Error generating admission number:', error);
                 // Fallback to default format based on campus
                 const currentYear = new Date().getFullYear();
                 if (campusType === 'west') {
-                    return `EAVI-W/${currentYear}/0001`;
+                    return `EAVI/0001/${currentYear.toString().slice(-2)}`;
                 } else if (campusType === 'town') {
-                    return `EAVI-T/${currentYear}/0001`;
+                    return `EAVI/0001/${currentYear.toString().slice(-2)}`;
                 } else {
-                    return `EAVI/${currentYear}/0001`;
+                    return `EAVI/0001/${currentYear.toString().slice(-2)}`;
                 }
             }
         }
@@ -2956,74 +2992,6 @@
             }
         }
 
-        // Generate admission number based on settings
-        async function generateRefNo() {
-            try {
-                // Load settings
-                const settings = await getAllFromDB('settings');
-                
-                // Get setting values or defaults
-                const prefix = settings.find(s => s.key === 'admissionPrefix')?.value || 'EAVI';
-                const separator = settings.find(s => s.key === 'admissionSeparator')?.value || '/';
-                const yearFormat = settings.find(s => s.key === 'admissionYearFormat')?.value || 'yyyy';
-                const startNumber = parseInt(settings.find(s => s.key === 'admissionStartNumber')?.value || '1');
-                const numberFormat = parseInt(settings.find(s => s.key === 'admissionNumberFormat')?.value || '4');
-                
-                // Get current year
-                const currentYear = yearFormat === 'yy' ? new Date().getFullYear().toString().slice(-2) : new Date().getFullYear();
-                
-                // Get the last admission number from database
-                const transaction = state.db.transaction('students', 'readonly');
-                const store = transaction.objectStore('students');
-                const index = store.index('refNo');
-                const request = index.openCursor(null, 'prev');
-                
-                return new Promise(resolve => {
-                    request.onsuccess = (event) => {
-                        const cursor = event.target.result;
-                        let lastNum = startNumber - 1; // Start from one less than start number
-                        
-                        if (cursor) {
-                            const lastRef = cursor.value.refNo;
-                            // Try to extract the number part from the last reference
-                            const parts = lastRef.split(separator);
-                            if (parts.length >= 3) {
-                                const lastNumberPart = parts[2];
-                                const lastNumber = parseInt(lastNumberPart);
-                                if (!isNaN(lastNumber)) {
-                                    lastNum = lastNumber;
-                                }
-                            }
-                        }
-                        
-                        // Increment and format the new number
-                        const newNum = (lastNum + 1).toString().padStart(numberFormat, '0');
-                        resolve(`${prefix}${separator}${currentYear}${separator}${newNum}`);
-                    };
-                });
-            } catch (error) {
-                console.error('Error generating admission number:', error);
-                // Fallback to default format
-                const transaction = state.db.transaction('students', 'readonly');
-                const store = transaction.objectStore('students');
-                const index = store.index('refNo');
-                const request = index.openCursor(null, 'prev');
-                
-                return new Promise(resolve => {
-                    request.onsuccess = (event) => {
-                        const cursor = event.target.result;
-                        let lastNum = 0;
-                        if (cursor) {
-                            const lastRef = cursor.value.refNo;
-                            lastNum = parseInt(lastRef.split('/').pop());
-                        }
-                        const newNum = (lastNum + 1).toString().padStart(4, '0');
-                        resolve(`EAVI/8833/${newNum}`);
-                    };
-                });
-            }
-        }
-
         function formatDate(date) {
             if (!date || isNaN(date)) return '';
             const d = new Date(date);
@@ -3034,11 +3002,18 @@
         }
 
         async function saveStudentRecord(data) {
+            // If data has an ID, it's an update. Otherwise, it's an addition.
+            // The DB schema enforces uniqueness on 'admNo', so addToDB/updateInDB will throw
+            // a 'ConstraintError' on duplicates, which is handled in handleGenerate.
             if (data.id) {
-                return updateInDB('students', data);
+                // It's an update
+                await updateInDB('students', data);
+                return data.id;
             } else {
-                delete data.id; // ensure it's undefined for auto-increment
-                return addToDB('students', data);
+                // It's a new record. The 'id' will be auto-incremented by IndexedDB.
+                // The addToDB function returns the new ID.
+                const newId = await addToDB('students', data);
+                return newId;
             }
         }
 
@@ -3083,6 +3058,7 @@
             tempDiv.style.margin = '0 auto';
             tempDiv.style.boxSizing = 'border-box';
             tempDiv.style.overflow = 'hidden';
+            tempDiv.classList.add('pdf-render-mode'); // Force desktop A4 layout
             
             if (docType === 'Admission') {
                 // For admission letters, get only the first page and apply single-page class
@@ -3198,6 +3174,7 @@
                     tempDiv.style.margin = '0 auto';
                     tempDiv.style.boxSizing = 'border-box';
                     tempDiv.style.overflow = 'hidden';
+                    tempDiv.classList.add('pdf-render-mode'); // Force desktop A4 layout
                     
                     // Clone content
                     const pageSelector = docType === 'admission' ? '.page.A4:first-child' : '.page.A4';
@@ -3234,11 +3211,7 @@
                     
                     const imgWidth = canvas.width;
                     const imgHeight = canvas.height;
-                    
-                    // Calculate ratios for width and height, then use the smaller one to ensure fit
-                    const widthRatio = pageWidth / (imgWidth * 0.264583);
-                    const heightRatio = pageHeight / (imgHeight * 0.264583);
-                    const ratio = Math.min(widthRatio, heightRatio, 1); // Never scale up
+                    const ratio = Math.min(pageWidth / (imgWidth * 0.264583), pageHeight / (imgHeight * 0.264583));
                     
                     const finalWidth = (imgWidth * 0.264583) * ratio;
                     const finalHeight = (imgHeight * 0.264583) * ratio;
@@ -3255,15 +3228,7 @@
                     }
                     
                     resolve(blob);
-                    
                 } catch (error) {
-                    // Cleanup on error
-                    const tempElements = document.querySelectorAll('div[style*="9999"]');
-                    tempElements.forEach(el => {
-                        if (el.parentNode) {
-                            el.parentNode.removeChild(el);
-                        }
-                    });
                     reject(error);
                 }
             });
@@ -3300,6 +3265,7 @@
                 tempDiv.style.margin = '0 auto';
                 tempDiv.style.boxSizing = 'border-box';
                 tempDiv.style.overflow = 'hidden';
+                tempDiv.classList.add('pdf-render-mode'); // Force desktop A4 layout
                 
                 if (docType === 'Admission') {
                     // For admission letters, get only the first page and apply single-page class
@@ -3608,90 +3574,6 @@
                     }
                 });
             }
-        }
-
-        // Helper function to generate PDF blob more efficiently
-        async function generatePDFBlob(previewElement, docType, jsPDF) {
-            return new Promise(async (resolve, reject) => {
-                try {
-                    // Create temporary element
-                    const tempDiv = document.createElement('div');
-                    tempDiv.style.position = 'fixed';
-                    tempDiv.style.top = '0';
-                    tempDiv.style.left = '0';
-                    tempDiv.style.width = '21cm';
-                    tempDiv.style.height = '29.7cm';
-                    tempDiv.style.backgroundColor = '#ffffff';
-                    tempDiv.style.zIndex = '9999';
-                    tempDiv.style.padding = '1cm';
-                    tempDiv.style.margin = '0 auto';
-                    tempDiv.style.boxSizing = 'border-box';
-                    tempDiv.style.overflow = 'hidden';
-                    
-                    // Clone content
-                    const pageSelector = docType === 'admission' ? '.page.A4:first-child' : '.page.A4';
-                    const targetPage = previewElement.querySelector(pageSelector);
-                    if (targetPage) {
-                        const clonedPage = targetPage.cloneNode(true);
-                        clonedPage.classList.add('single-page');
-                        tempDiv.appendChild(clonedPage);
-                    }
-                    
-                    document.body.appendChild(tempDiv);
-                    
-                    // Wait for rendering
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    
-                    // Check html2canvas availability
-                    if (!window.html2canvas) {
-                        throw new Error('HTML2Canvas library not loaded');
-                    }
-                    
-                    // Generate canvas
-                    const canvas = await html2canvas(tempDiv, {
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: true,
-                        backgroundColor: '#ffffff'
-                    });
-                    
-                    // Create PDF
-                    const imgData = canvas.toDataURL('image/png');
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pageWidth = pdf.internal.pageSize.getWidth();
-                    const pageHeight = pdf.internal.pageSize.getHeight();
-                    
-                    const imgWidth = canvas.width;
-                    const imgHeight = canvas.height;
-                    const ratio = Math.min(pageWidth / (imgWidth * 0.264583), pageHeight / (imgHeight * 0.264583));
-                    
-                    const finalWidth = (imgWidth * 0.264583) * ratio;
-                    const finalHeight = (imgHeight * 0.264583) * ratio;
-                    
-                    const x = (pageWidth - finalWidth) / 2;
-                    const y = (pageHeight - finalHeight) / 2;
-                    
-                    pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
-                    const blob = pdf.output('blob');
-                    
-                    // Cleanup
-                    if (document.body.contains(tempDiv)) {
-                        document.body.removeChild(tempDiv);
-                    }
-                    
-                    resolve(blob);
-                    
-                } catch (error) {
-                    // Cleanup on error
-                    const tempElements = document.querySelectorAll('div[style*="9999"]');
-                    tempElements.forEach(el => {
-                        if (el.parentNode) {
-                            el.parentNode.removeChild(el);
-                        }
-                    });
-                    reject(error);
-                }
-            });
         }
 
         // --- STUDENT LIST ---
