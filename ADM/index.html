@@ -55,15 +55,15 @@
     <style>
         /* --- GLOBAL STYLES & RESET --- */
         :root {
-            --primary-color: #667eea;
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-color: #4c63d2;
+            --primary-color: #ec4899;
+            --primary-gradient: linear-gradient(135deg, #f472b6 0%, #db2777 100%);
+            --secondary-color: #be185d;
             --accent-color: #f093fb;
             --accent-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --success-color: #4ecdc4;
             --warning-color: #fce38a;
             --danger-color: #ff6b6b;
-            --light-gray: #f8fafc;
+            --light-gray: #fff1f2;
             --medium-gray: #e2e8f0;
             --dark-gray: #64748b;
             --text-color: #334155;
@@ -601,8 +601,8 @@
         /* Mobile button adjustments */
         @media (max-width: 768px) {
             .btn {
-                padding: 0.75rem 1.25rem;
-                font-size: 0.8rem;
+                padding: 8px 16px;
+                font-size: 14px;
             }
             
             .btn-group {
@@ -611,8 +611,8 @@
             }
             
             .btn-sm {
-                padding: 0.5rem 0.875rem;
-                font-size: 0.7rem;
+                padding: 6px 12px;
+                font-size: 12px;
             }
         }
         
@@ -2412,6 +2412,12 @@
                 generateForm.btnGenerate.disabled = false;
                 generateForm.btnGenerate.textContent = generateForm.id.value ? 'Update Record' : 'Generate & Save';
                 
+                // If a new student was created (not an edit), reset the form for the next entry.
+                if (!isEditing) {
+                    // We call this without the toast message so it happens silently in the background.
+                    resetGenerateForm(true);
+                }
+                
             } catch (error) {
                 console.error('Error saving student:', error);
                 generateForm.btnGenerate.disabled = false;
@@ -2598,7 +2604,7 @@
             }
         }
 
-        function resetGenerateForm() {
+        function resetGenerateForm(silent = false) {
             generateForm.id.value = '';
             generateForm.name.value = '';
             generateForm.admNo.value = '';
@@ -2611,7 +2617,9 @@
             previewAdmission.innerHTML = '';
             previewBursary.innerHTML = '';
             state.currentStudentData = null;
-            showToast('Form cleared.', 'success');
+            if (!silent) {
+                showToast('Form cleared.', 'success');
+            }
             
             // Auto-generate a new admission number
             setTimeout(() => {
@@ -2917,10 +2925,9 @@
                     const ref = student.refNo;
                     // Check if this reference matches our format
                     const parts = ref.split(separator);
-                    if (parts.length >= 3 && 
-                        parts[0] === prefix && 
-                        (parts[1] === currentYear.toString() || parts[1] === currentYear.toString().slice(-2))) {
-                        const numberPart = parts[2];
+                    // Format is PREFIX/NUMBER/YEAR, so parts are [prefix, number, year]
+                    if (parts.length === 3 && parts[0] === prefix && (parts[2] === currentYear.toString() || parts[2] === currentYear.toString().slice(-2))) {
+                        const numberPart = parts[1];
                         const number = parseInt(numberPart);
                         if (!isNaN(number) && number > maxNum) {
                             maxNum = number;
@@ -3669,7 +3676,7 @@
                 
                 admissionActions.classList.remove('hidden');
                 bursaryActions.classList.remove('hidden');
-                navigateToView('viewGenerate');
+                navigateToView('viewReports');
                 showToast(`Viewing record for ${student.name}`, 'success');
             }
         }
