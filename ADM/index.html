@@ -836,7 +836,7 @@
             display: block;
             max-width: 100%;
             height: auto;
-            margin: 0 auto 1.5rem;
+            margin: 0 0 1.5rem 0; /* Align to left */
         }
 
         .letter-header {
@@ -1337,7 +1337,7 @@
         .pdf-render-mode .page-header-img {
             max-width: 100% !important;
             height: auto !important;
-            margin: 0 auto 1.5rem !important;
+            margin: 0 0 1.5rem 0 !important; /* Align to left for PDF */
         }
 
         .pdf-render-mode .letter-header {
@@ -2414,8 +2414,13 @@
                 
                 // If a new student was created (not an edit), reset the form for the next entry.
                 if (!isEditing) {
-                    // We call this without the toast message so it happens silently in the background.
-                    resetGenerateForm(true);
+                    // The form will now be reset when the user clicks the "Back to Generate" button.
+
+                    // Automatically trigger the share dialog for the newly created student.
+                    // This must be called within the original user gesture (the button click).
+                    setTimeout(async () => {
+                        await shareViaWhatsApp();
+                    }, 200); // A small delay to allow the UI to update before sharing.
                 }
                 
             } catch (error) {
@@ -2557,9 +2562,10 @@
         function renderHeader(data) {
             return `
                 ${data.headerImg ? `<img src="${data.headerImg}" class="page-header-img">` : '<div class="page-header-img" style="text-align:center; border:1px dashed #ccc; display:flex; align-items:center; justify-content:center; background-color:#f9f9f9;">Header Image Area (15cm x 4cm)</div>'}
-                <div class="letter-header">
-                    <span>OUR REF: ${data.refNo}</span>
-                    <span>DATE: ${data.currentDate}</span>
+                <div class="letter-header" style="display: block; visibility: hidden;">
+                    <div style="float: left;">&nbsp;</div>
+                    <div style="float: right;">&nbsp;</div>
+                    <div style="clear: both;"></div>
                 </div>
             `;
         }
@@ -3061,7 +3067,6 @@
             tempDiv.style.height = '29.7cm';
             tempDiv.style.backgroundColor = '#ffffff';
             tempDiv.style.zIndex = '9999';
-            tempDiv.style.padding = '1cm';
             tempDiv.style.margin = '0 auto';
             tempDiv.style.boxSizing = 'border-box';
             tempDiv.style.overflow = 'hidden';
@@ -3142,6 +3147,17 @@
                     const y = (pageHeight - finalHeight) / 2;
 
                     pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
+
+                    // Add REF and DATE text directly to the PDF for precise control
+                    const studentData = state.currentStudentData;
+                    if (studentData) {
+                        pdf.setFontSize(10);
+                        pdf.setFont('helvetica', 'bold');
+                        // Add REF text with a 15mm left margin
+                        pdf.text(`OUR REF: ${studentData.refNo}`, 15, 65); 
+                        // Add DATE text with a 15mm right margin
+                        pdf.text(`DATE: ${studentData.currentDate}`, pageWidth - 15, 65, { align: 'right' });
+                    }
                     
                     const fileName = docType === 'Admission' ? 
                         `Admission_Letter_${state.currentStudentData.name.replace(/[^a-zA-Z0-9]/g, '_')}_${state.currentStudentData.refNo.replace('/', '-')}.pdf` :
@@ -3177,7 +3193,6 @@
                     tempDiv.style.height = '29.7cm';
                     tempDiv.style.backgroundColor = '#ffffff';
                     tempDiv.style.zIndex = '9999';
-                    tempDiv.style.padding = '1cm';
                     tempDiv.style.margin = '0 auto';
                     tempDiv.style.boxSizing = 'border-box';
                     tempDiv.style.overflow = 'hidden';
@@ -3227,6 +3242,16 @@
                     const y = (pageHeight - finalHeight) / 2;
                     
                     pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
+
+                    // Add REF and DATE text directly to the PDF for precise control
+                    const studentData = state.currentStudentData;
+                    if (studentData) {
+                        pdf.setFontSize(10);
+                        pdf.setFont('helvetica', 'bold');
+                        pdf.text(`OUR REF: ${studentData.refNo}`, 15, 65);
+                        pdf.text(`DATE: ${studentData.currentDate}`, pageWidth - 15, 65, { align: 'right' });
+                    }
+
                     const blob = pdf.output('blob');
                     
                     // Cleanup
@@ -3268,7 +3293,6 @@
                 tempDiv.style.height = '29.7cm';
                 tempDiv.style.backgroundColor = '#ffffff';
                 tempDiv.style.zIndex = '9999';
-                tempDiv.style.padding = '1cm';
                 tempDiv.style.margin = '0 auto';
                 tempDiv.style.boxSizing = 'border-box';
                 tempDiv.style.overflow = 'hidden';
@@ -3350,7 +3374,16 @@
                 const y = (pageHeight - finalHeight) / 2;
 
                 pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
-                
+
+                // Add REF and DATE text directly to the PDF for precise control
+                const studentData = state.currentStudentData;
+                if (studentData) {
+                    pdf.setFontSize(10);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.text(`OUR REF: ${studentData.refNo}`, 15, 65);
+                    pdf.text(`DATE: ${studentData.currentDate}`, pageWidth - 15, 65, { align: 'right' });
+                }
+
                 // Generate the PDF as a Blob
                 const pdfBlob = pdf.output('blob');
                 
@@ -3632,6 +3665,7 @@
                         <td>${s.year}</td>
                         <td class="btn-group">
                             <button class="btn btn-sm btn-primary" onclick="app.viewStudent(${s.id})">View</button>
+                            <button class="btn btn-sm btn-success" onclick="app.shareStudentFromList(${s.id})">📱 Share</button>
                             <button class="btn btn-sm btn-secondary" onclick="app.regenerateStudent(${s.id})">Regenerate / Edit</button>
                             <button class="btn btn-sm btn-danger" onclick="app.deleteStudent(${s.id})">Delete</button>
                         </td>
@@ -3662,6 +3696,9 @@
                     return;
                 }
                 
+                // Overwrite the stored date with the current date for viewing/printing purposes.
+                student.currentDate = formatDate(new Date());
+
                 state.currentStudentData = student;
                 renderAdmissionPages(student);
                 renderBursaryPage(student);
@@ -3730,6 +3767,40 @@
                 bursaryActions.classList.remove('hidden');
                 navigateToView('viewGenerate');
                 showToast(`Editing record for ${student.name}. Previews updated with current images.`, 'success');
+            }
+        }
+
+        async function shareStudentFromList(id) {
+            showToast('Preparing documents for sharing...', 'info');
+            try {
+                const student = await getByIdFromDB('students', id);
+                if (!student) {
+                    showToast('Student not found.', 'error');
+                    return;
+                }
+
+                // Check if student belongs to current admin's campus
+                if (state.currentAdmin && student.campus !== state.currentAdmin.type) {
+                    showToast('Access denied: Student belongs to a different campus.', 'error');
+                    return;
+                }
+
+                // Set current student data, ensuring the date is current
+                student.currentDate = formatDate(new Date());
+                state.currentStudentData = student;
+
+                // Render documents into the (potentially hidden) preview areas
+                // This is necessary for the PDF generation to find the content
+                renderAdmissionPages(student);
+                renderBursaryPage(student);
+                applyTemplateStyle();
+
+                // Now call the main share function, which will generate and share the PDFs
+                await shareViaWhatsApp();
+
+            } catch (error) {
+                console.error('Error sharing from list:', error);
+                showToast(`Failed to prepare documents for sharing: ${error.message}`, 'error');
             }
         }
 
@@ -4419,7 +4490,8 @@
         window.app = {
             viewStudent,
             regenerateStudent,
-            deleteStudent
+            deleteStudent,
+            shareStudentFromList
         };
 
         // --- START THE APP ---
