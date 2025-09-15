@@ -2057,89 +2057,82 @@
             if (existingCourses.length === 0) {
                 const courses = [
                     // Medical and Healthcare Courses
-                    { name: 'Peri-operative Theater Technology', feeStructurePdf: null },
-                    { name: 'Orthopaedic and Trauma Medicine', feeStructurePdf: null },
-                    { name: 'Dental Assistant', feeStructurePdf: null },
-                    { name: 'Phlebotomy', feeStructurePdf: null },
-                    { name: 'Certified Nurse Assistant (CNA)', feeStructurePdf: null },
-                    { name: 'Morgue Attendant', feeStructurePdf: null },
-                    { name: 'Basic Life Support (BLS)', feeStructurePdf: null },
-                    { name: 'Mortuary Science', feeStructurePdf: null },
+                    { name: 'Peri-operative Theater', feeStructurePdf: null },
+                    { name: 'Trauma and Orthopaedic Medicine', feeStructurePdf: null },
+                    { name: 'Certified Nurse Assistant(CNA)', feeStructurePdf: null },
+                    { name: 'Aging and Disability Management', feeStructurePdf: null },
+                    { name: 'Basic life Support (BLS)', feeStructurePdf: null },
                     { name: 'Home Care Nursing', feeStructurePdf: null },
                     { name: 'Health Services Support', feeStructurePdf: null },
                     { name: 'Health Care Assistant', feeStructurePdf: null },
                     { name: 'Individual Support', feeStructurePdf: null },
-                    { name: 'Caregiver', feeStructurePdf: null },
-                    { name: 'Nurse Aide', feeStructurePdf: null },
-                    { name: 'Patient Attendant', feeStructurePdf: null },
-                    { name: 'Midwifery', feeStructurePdf: null },
-                    { name: 'Community Health Assistant', feeStructurePdf: null },
-                    { name: 'Public Health', feeStructurePdf: null },
-                    { name: 'Nutrition and Dietetics', feeStructurePdf: null },
-                    { name: 'Medical Engineering and Laboratory Technology', feeStructurePdf: null },
-                    { name: 'Community Health and Social Work', feeStructurePdf: null },
-                    { name: 'HIV/AIDS Management', feeStructurePdf: null },
-                    { name: 'HIV/AIDS Testing & Counseling (HTC)', feeStructurePdf: null },
-                    { name: 'First Aid', feeStructurePdf: null },
-                    
-                    // Social Services and Care
-                    { name: 'Child Care and Protection', feeStructurePdf: null },
-                    { name: 'Social Work and Nurse Aide', feeStructurePdf: null },
-                    { name: 'Community Development and Social Work', feeStructurePdf: null },
-                    { name: 'Gender and Development Studies', feeStructurePdf: null },
-                    { name: 'Counseling', feeStructurePdf: null },
-                    { name: 'Guidance and Counseling Skills Development', feeStructurePdf: null },
-                    { name: 'Counseling Psychology', feeStructurePdf: null },
-                    { name: 'Conflict Management and Peace Building', feeStructurePdf: null },
-                    
-                    // Beauty and Fashion
+                    { name: 'Elderly Caregivers', feeStructurePdf: null },
+                    { name: 'Nurse aide', feeStructurePdf: null },
+                    { name: 'Patient attendant', feeStructurePdf: null },
                     { name: 'Hairdressing and Beauty Therapy', feeStructurePdf: null },
                     { name: 'Fashion and Design', feeStructurePdf: null },
-                    { name: 'Garment Making', feeStructurePdf: null },
-                    
-                    // Administrative and Office Skills
+                    { name: 'Garment making', feeStructurePdf: null },
                     { name: 'Secretarial', feeStructurePdf: null },
                     { name: 'Health Records Management with ICT', feeStructurePdf: null },
-                    { name: 'Computer Packages / IT / ICT / Information Science', feeStructurePdf: null },
-                    { name: 'Public Administration and Relations', feeStructurePdf: null },
-                    { name: 'Customer Care / Front Office Management', feeStructurePdf: null },
-                    
-                    // Education and Training
+                    { name: 'Social work and nurse aide', feeStructurePdf: null },
+                    { name: 'Computer Packages/ IT/ICT/ Information Science', feeStructurePdf: null },
+                    { name: 'Community Health Assistant', feeStructurePdf: null },
                     { name: 'Teacher Education', feeStructurePdf: null },
-                    { name: 'Leadership Skills Development', feeStructurePdf: null },
-                    { name: 'Training of Trainers (TOT)', feeStructurePdf: null },
-                    
-                    // Engineering and Technical
+                    { name: 'Nutrition and Dietetics', feeStructurePdf: null },
+                    { name: 'Medical Engineering and', feeStructurePdf: null },
+                    { name: 'Lab Technology', feeStructurePdf: null },
                     { name: 'Security Management', feeStructurePdf: null },
-                    { name: 'Electrical Engineering, Civil / Building / Survey', feeStructurePdf: null },
-                    { name: 'Water Engineering / Plumbing, Mechanical / Automotive', feeStructurePdf: null },
-                    
-                    // Hospitality and Food Services
-                    { name: 'Catering / Food and Beverage Management', feeStructurePdf: null },
-                    { name: 'Culinary Arts', feeStructurePdf: null },
-                    { name: 'Hotel and Hospitality Management', feeStructurePdf: null },
-                    { name: 'Tourism Management', feeStructurePdf: null },
-                    
-                    // Business and Management
+                    { name: 'Catering/ Food and Beverage Management', feeStructurePdf: null },
                     { name: 'Store Keeping', feeStructurePdf: null },
                     { name: 'Purchasing & Supply Management', feeStructurePdf: null },
-                    { name: 'NGO Management', feeStructurePdf: null },
-                    { name: 'Logistics and Procurement Management', feeStructurePdf: null },
-                    { name: 'Human Resource Management (HRM)', feeStructurePdf: null },
-                    { name: 'Business Administration and Management', feeStructurePdf: null },
-                    { name: 'Finance & Banking', feeStructurePdf: null },
-                    { name: 'Sales and Marketing', feeStructurePdf: null },
-                    { name: 'Entrepreneurship', feeStructurePdf: null },
-                    { name: 'Financial Management for NGOs', feeStructurePdf: null },
-                    
-                    // Specialized Skills
+                    { name: 'Electrical Engineering, Civil Engineering', feeStructurePdf: null },
+                    { name: 'Building and contraction', feeStructurePdf: null },
+                    { name: 'Survey', feeStructurePdf: null },
+                    { name: 'Water Engineering', feeStructurePdf: null },
+                    { name: 'Plumbing', feeStructurePdf: null },
+                    { name: 'Mechanical Engineering', feeStructurePdf: null },
+                    { name: 'Automotive Engineering', feeStructurePdf: null },
+                    { name: 'Community health and Social Work', feeStructurePdf: null },
                     { name: 'General Agriculture', feeStructurePdf: null },
                     { name: 'Criminology', feeStructurePdf: null },
+                    { name: 'Leadership skills Development', feeStructurePdf: null },
+                    { name: 'Training of Trainers(TOT)', feeStructurePdf: null },
+                    { name: 'NGO\'s Management', feeStructurePdf: null },
+                    { name: 'Logistics and Procurement Management', feeStructurePdf: null },
+                    { name: 'Human Resource Management (HRM)', feeStructurePdf: null },
                     { name: 'Nutrition Management Skills', feeStructurePdf: null },
+                    { name: 'Guidance and Counseling skills Development', feeStructurePdf: null },
+                    { name: 'Counseling Psychology', feeStructurePdf: null },
+                    { name: 'Financial Management for Ngo\'s', feeStructurePdf: null },
+                    { name: 'Conflict management and peace building', feeStructurePdf: null },
+                    { name: 'Tourism Management', feeStructurePdf: null },
+                    { name: 'Customer Care/ Front office Management', feeStructurePdf: null },
+                    { name: 'Hotel and Hospitality Management', feeStructurePdf: null },
+                    { name: 'Hiv/Aids management', feeStructurePdf: null },
+                    { name: 'Hiv/Aid, Testing & Counseling (HTC)', feeStructurePdf: null },
+                    { name: 'Gender and Development studies', feeStructurePdf: null },
+                    { name: 'Community Development and Social Work', feeStructurePdf: null },
+                    { name: 'Public Administration and Relations', feeStructurePdf: null },
+                    { name: 'Business Administration and Management', feeStructurePdf: null },
+                    { name: 'Finance & Banking', feeStructurePdf: null },
+                    { name: 'Sales and marketing', feeStructurePdf: null },
+                    { name: 'Entrepreneur', feeStructurePdf: null },
+                    { name: 'Counseling', feeStructurePdf: null },
                     { name: 'Monitoring and Evaluation of Projects', feeStructurePdf: null },
-                    { name: 'Disaster Management', feeStructurePdf: null },
+                    { name: 'Disaster management', feeStructurePdf: null },
+                    { name: 'First aid', feeStructurePdf: null },
+                    { name: 'Fire fighting and extinguisher', feeStructurePdf: null },
+                    { name: 'Project Management', feeStructurePdf: null },
                     
-                    // Legacy courses (keeping for existing data compatibility)
+                    // Existing courses from the original code to maintain compatibility
+                    { name: 'Dental Assistant', feeStructurePdf: null },
+                    { name: 'Phlebotomy', feeStructurePdf: null },
+                    { name: 'Morgue Attendant', feeStructurePdf: null },
+                    { name: 'Mortuary Science', feeStructurePdf: null },
+                    { name: 'Midwifery', feeStructurePdf: null },
+                    { name: 'Public Health', feeStructurePdf: null },
+                    { name: 'Child Care and Protection', feeStructurePdf: null },
+                    { name: 'Culinary Arts', feeStructurePdf: null },
                     { name: 'Diploma in Accounting', feeStructurePdf: null },
                     { name: 'Certificate in ICT', feeStructurePdf: null },
                     { name: 'Certificate in Hospitality', feeStructurePdf: null }
@@ -4090,6 +4083,10 @@
             // Populate course dropdown in generate form
             const courseSelect = generateForm.course;
             courseSelect.innerHTML = '<option value="">Select Course</option>';
+            
+            // Sort courses alphabetically
+            courses.sort((a, b) => a.name.localeCompare(b.name));
+            
             courses.forEach(c => courseSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`);
 
             // Populate course table
@@ -4377,87 +4374,84 @@
 
             const newCourses = [
                 // Medical and Healthcare Courses
-                'Peri-operative Theater Technology',
-                'Orthopaedic and Trauma Medicine',
-                'Dental Assistant',
-                'Phlebotomy',
-                'Certified Nurse Assistant (CNA)',
-                'Morgue Attendant',
-                'Basic Life Support (BLS)',
-                'Mortuary Science',
+                'Peri-operative Theater',
+                'Trauma and Orthopaedic Medicine',
+                'Certified Nurse Assistant(CNA)',
+                'Aging and Disability Management',
+                'Basic life Support (BLS)',
                 'Home Care Nursing',
                 'Health Services Support',
                 'Health Care Assistant',
                 'Individual Support',
-                'Caregiver',
-                'Nurse Aide',
-                'Patient Attendant',
-                'Midwifery',
-                'Community Health Assistant',
-                'Public Health',
-                'Nutrition and Dietetics',
-                'Medical Engineering and Laboratory Technology',
-                'Community Health and Social Work',
-                'HIV/AIDS Management',
-                'HIV/AIDS Testing & Counseling (HTC)',
-                'First Aid',
-                
-                // Social Services and Care
-                'Child Care and Protection',
-                'Social Work and Nurse Aide',
-                'Community Development and Social Work',
-                'Gender and Development Studies',
-                'Counseling',
-                'Guidance and Counseling Skills Development',
-                'Counseling Psychology',
-                'Conflict Management and Peace Building',
-                
-                // Beauty and Fashion
+                'Elderly Caregivers',
+                'Nurse aide',
+                'Patient attendant',
                 'Hairdressing and Beauty Therapy',
                 'Fashion and Design',
-                'Garment Making',
-                
-                // Administrative and Office Skills
+                'Garment making',
                 'Secretarial',
                 'Health Records Management with ICT',
-                'Computer Packages / IT / ICT / Information Science',
-                'Public Administration and Relations',
-                'Customer Care / Front Office Management',
-                
-                // Education and Training
+                'Social work and nurse aide',
+                'Computer Packages/ IT/ICT/ Information Science',
+                'Community Health Assistant',
                 'Teacher Education',
-                'Leadership Skills Development',
-                'Training of Trainers (TOT)',
-                
-                // Engineering and Technical
+                'Nutrition and Dietetics',
+                'Medical Engineering and',
+                'Lab Technology',
                 'Security Management',
-                'Electrical Engineering, Civil / Building / Survey',
-                'Water Engineering / Plumbing, Mechanical / Automotive',
-                
-                // Hospitality and Food Services
-                'Catering / Food and Beverage Management',
-                'Culinary Arts',
-                'Hotel and Hospitality Management',
-                'Tourism Management',
-                
-                // Business and Management
+                'Catering/ Food and Beverage Management',
                 'Store Keeping',
                 'Purchasing & Supply Management',
-                'NGO Management',
-                'Logistics and Procurement Management',
-                'Human Resource Management (HRM)',
-                'Business Administration and Management',
-                'Finance & Banking',
-                'Sales and Marketing',
-                'Entrepreneurship',
-                'Financial Management for NGOs',
-                
-                // Specialized Skills
+                'Electrical Engineering, Civil Engineering',
+                'Building and contraction',
+                'Survey',
+                'Water Engineering',
+                'Plumbing',
+                'Mechanical Engineering',
+                'Automotive Engineering',
+                'Community health and Social Work',
                 'General Agriculture',
                 'Criminology',
+                'Leadership skills Development',
+                'Training of Trainers(TOT)',
+                'NGO\'s Management',
+                'Logistics and Procurement Management',
+                'Human Resource Management (HRM)',
                 'Nutrition Management Skills',
+                'Guidance and Counseling skills Development',
+                'Counseling Psychology',
+                'Financial Management for Ngo\'s',
+                'Conflict management and peace building',
+                'Tourism Management',
+                'Customer Care/ Front office Management',
+                'Hotel and Hospitality Management',
+                'Hiv/Aids management',
+                'Hiv/Aid, Testing & Counseling (HTC)',
+                'Gender and Development studies',
+                'Community Development and Social Work',
+                'Public Administration and Relations',
+                'Business Administration and Management',
+                'Finance & Banking',
+                'Sales and marketing',
+                'Entrepreneur',
+                'Counseling',
                 'Monitoring and Evaluation of Projects',
-                'Disaster Management'
+                'Disaster management',
+                'First aid',
+                'Fire fighting and extinguisher',
+                'Project Management',
+                
+                // Keep existing courses to avoid duplicates
+                'Peri-operative Theater Technology',
+                'Orthopaedic and Trauma Medicine',
+                'Dental Assistant',
+                'Phlebotomy',
+                'Morgue Attendant',
+                'Mortuary Science',
+                'Midwifery',
+                'Public Health',
+                'Child Care and Protection',
+                'Culinary Arts'
             ];
 
             try {
