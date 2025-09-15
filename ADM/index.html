@@ -1672,8 +1672,8 @@
                         <p style="margin-bottom: 1rem;">Customize how admission numbers are generated for each campus.</p>
                         
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
-                            <!-- West Campus Settings -->
-                            <div class="card" style="background: rgba(102, 126, 234, 0.1); border: 1px solid var(--primary-color);">
+                            <!-- West Campus Settings - Only visible to West Campus Admin -->
+                            <div class="card west-campus-settings" style="background: rgba(102, 126, 234, 0.1); border: 1px solid var(--primary-color);">
                                 <h4 style="color: var(--primary-color); margin-top: 0;">West Campus</h4>
                                 
                                 <div class="form-group">
@@ -1719,8 +1719,8 @@
                                 </div>
                             </div>
                             
-                            <!-- Town Campus Settings -->
-                            <div class="card" style="background: rgba(240, 147, 251, 0.1); border: 1px solid var(--accent-color);">
+                            <!-- Town Campus Settings - Only visible to Town Campus Admin -->
+                            <div class="card town-campus-settings" style="background: rgba(240, 147, 251, 0.1); border: 1px solid var(--accent-color);">
                                 <h4 style="color: var(--accent-color); margin-top: 0;">Town Campus</h4>
                                 
                                 <div class="form-group">
@@ -1925,6 +1925,9 @@
             await loadInitialData();
             setupEventListeners();
             navigateToView('viewDashboard');
+            
+            // Show campus-specific settings
+            showCampusSpecificSettings();
             
             // Auto-generate admission number for the current campus
             if (state.currentAdmin) {
@@ -2307,12 +2310,34 @@
             if (viewId === 'viewSettings') {
                 loadCoursesAndDepartments();
                 loadFeeStructureFiles();
+                // Show only the relevant campus settings
+                showCampusSpecificSettings();
             }
             // Auto-generate admission number when navigating to generate view
             if (viewId === 'viewGenerate') {
                 setTimeout(() => {
                     autoGenerateAdmissionNumber();
                 }, 100);
+            }
+        }
+
+        // Show only the campus-specific settings based on the logged-in user
+        function showCampusSpecificSettings() {
+            // Get all campus settings containers
+            const westCampusSettings = document.querySelector('.west-campus-settings');
+            const townCampusSettings = document.querySelector('.town-campus-settings');
+            
+            // Hide both by default
+            if (westCampusSettings) westCampusSettings.style.display = 'none';
+            if (townCampusSettings) townCampusSettings.style.display = 'none';
+            
+            // Show only the relevant campus settings
+            if (state.currentAdmin) {
+                if (state.currentAdmin.type === 'west') {
+                    if (westCampusSettings) westCampusSettings.style.display = 'block';
+                } else if (state.currentAdmin.type === 'town') {
+                    if (townCampusSettings) townCampusSettings.style.display = 'block';
+                }
             }
         }
 
@@ -4022,6 +4047,9 @@
                 
                 // Load campus admission number settings
                 await loadCampusAdmissionSettings();
+                
+                // Show campus-specific settings
+                showCampusSpecificSettings();
                 
                 if (headerImgSetting || stampImgSetting) {
                     showToast('Loaded permanent header and stamp images.', 'success');
